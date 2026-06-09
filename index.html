@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ITSound — Brand Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --black: #0A0A0A;
+      --white: #FFFFFF;
+      --accent: #8B5CF6;
+      --accent2: #06D6A0;
+      --gray: #6B7280;
+      --gray-light: #9CA3AF;
+      --dark-card: #141414;
+      --dark-border: #1F1F1F;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      line-height: 1.6;
+    }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+
+    a { color: var(--accent2); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      background: rgba(10,10,10,0.85); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--dark-border);
+    }
+    nav .container {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    nav .logo-text {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700; font-size: 20px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    nav ul { display: flex; gap: 24px; list-style: none; align-items: center; }
+    nav ul li a {
+      color: var(--gray-light); font-size: 13px; font-weight: 500;
+      transition: color .2s; text-transform: uppercase; letter-spacing: .5px;
+    }
+    nav ul li a:hover { color: var(--white); text-decoration: none; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: .3s; }
+
+    @media (max-width: 768px) {
+      nav ul { display: none; position: absolute; top: 64px; left: 0; width: 100%; background: rgba(10,10,10,0.98); flex-direction: column; padding: 20px 24px; gap: 16px; border-bottom: 1px solid var(--dark-border); }
+      nav ul.open { display: flex; }
+      .hamburger { display: flex; }
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 120px 24px 80px;
+      background: radial-gradient(ellipse at 30% 20%, rgba(139,92,246,0.08) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 80%, rgba(6,214,160,0.06) 0%, transparent 60%);
+    }
+    .hero h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(36px, 7vw, 72px); font-weight: 900;
+      background: linear-gradient(135deg, var(--white) 30%, var(--accent) 70%, var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1.1; margin-bottom: 16px;
+    }
+    .hero p {
+      font-size: clamp(16px, 2vw, 22px); color: var(--gray-light);
+      max-width: 600px; margin: 0 auto 32px;
+    }
+    .hero .tag { display: inline-block; padding: 6px 16px; border: 1px solid var(--accent); border-radius: 100px; font-size: 12px; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 24px; }
+    .btn-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 28px; border-radius: 8px; font-weight: 600; font-size: 14px;
+      transition: all .25s; border: none; cursor: pointer;
+    }
+    .btn-primary { background: var(--accent); color: var(--white); }
+    .btn-primary:hover { background: #7C3AED; transform: translateY(-2px); }
+    .btn-outline { border: 1px solid var(--gray); color: var(--gray-light); background: transparent; }
+    .btn-outline:hover { border-color: var(--white); color: var(--white); transform: translateY(-2px); }
+
+    /* SECTIONS */
+    section { padding: 80px 0; }
+    section h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(24px, 4vw, 36px); font-weight: 700;
+      margin-bottom: 8px;
+    }
+    section .subtitle { color: var(--gray-light); font-size: 16px; margin-bottom: 48px; max-width: 600px; }
+    .section-divider { width: 60px; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 2px; margin-bottom: 24px; }
+
+    /* CARDS */
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+    .card {
+      background: var(--dark-card); border: 1px solid var(--dark-border);
+      border-radius: 12px; padding: 28px; transition: all .3s;
+    }
+    .card:hover { border-color: rgba(139,92,246,0.3); transform: translateY(-2px); }
+    .card .icon { font-size: 28px; margin-bottom: 12px; }
+    .card h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+    .card p, .card li { color: var(--gray-light); font-size: 14px; line-height: 1.7; }
+    .card ul { list-style: none; padding: 0; }
+    .card ul li::before { content: "• "; color: var(--accent); }
+
+    /* COLOR SWATCHES */
+    .swatches { display: flex; gap: 16px; flex-wrap: wrap; }
+    .swatch { width: 100px; height: 100px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; border: 1px solid rgba(255,255,255,0.1); }
+    .swatch span:first-child { font-size: 13px; margin-bottom: 4px; }
+
+    /* FONT DEMO */
+    .font-demo { display: flex; gap: 32px; flex-wrap: wrap; }
+    .font-box { flex: 1; min-width: 200px; }
+    .font-box .label { font-size: 11px; text-transform: uppercase; color: var(--gray); letter-spacing: 1px; margin-bottom: 8px; }
+    .font-orbitron { font-family: 'Orbitron', monospace; }
+    .font-inter { font-family: 'Inter', sans-serif; }
+    .font-demo .sample-title { font-size: 28px; margin-bottom: 4px; }
+    .font-demo .sample-body { font-size: 16px; color: var(--gray-light); }
+
+    /* POST TEMPLATE */
+    .post-card {
+      background: var(--dark-card); border: 1px solid var(--dark-border);
+      border-radius: 12px; padding: 28px; margin-bottom: 20px;
+    }
+    .post-card .post-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .post-card .badge { padding: 4px 12px; border-radius: 100px; font-size: 11px; font-weight: 600; background: rgba(139,92,246,0.15); color: var(--accent); }
+    .post-card h4 { font-size: 18px; font-weight: 600; margin-bottom: 12px; }
+    .post-card .caption { background: rgba(255,255,255,0.03); border-left: 2px solid var(--accent); padding: 16px; border-radius: 0 8px 8px 0; font-size: 13px; line-height: 1.8; color: var(--gray-light); white-space: pre-wrap; font-family: 'Inter', monospace; }
+    .post-card .hashtags { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+    .post-card .hashtags span { padding: 2px 10px; background: rgba(255,255,255,0.05); border-radius: 100px; font-size: 11px; color: var(--gray-light); }
+
+    /* TIMELINE */
+    .timeline { position: relative; padding-left: 32px; }
+    .timeline::before { content: ''; position: absolute; left: 8px; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(180deg, var(--accent), var(--accent2)); }
+    .timeline-item { position: relative; margin-bottom: 32px; }
+    .timeline-item::before { content: ''; position: absolute; left: -28px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); border: 2px solid var(--black); }
+    .timeline-item h4 { font-size: 16px; font-weight: 600; }
+    .timeline-item p { color: var(--gray-light); font-size: 14px; margin-top: 4px; }
+    .timeline-item .month { font-size: 11px; text-transform: uppercase; color: var(--accent2); letter-spacing: 1px; font-weight: 600; }
+
+    /* TABLE */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--dark-border); }
+    th { font-weight: 600; color: var(--accent2); font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+    td { color: var(--gray-light); }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+
+    /* CALENDAR */
+    .cal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+    .cal-item { background: var(--dark-card); border: 1px solid var(--dark-border); border-radius: 8px; padding: 16px; text-align: center; }
+    .cal-item .day { font-size: 12px; text-transform: uppercase; color: var(--gray); letter-spacing: 1px; margin-bottom: 4px; }
+    .cal-item .content { font-size: 14px; font-weight: 600; }
+    .cal-item .type { font-size: 11px; color: var(--accent); margin-top: 4px; }
+
+    /* CHECKLIST */
+    .checklist { list-style: none; padding: 0; }
+    .checklist li { padding: 8px 0; border-bottom: 1px solid var(--dark-border); display: flex; align-items: center; gap: 12px; font-size: 14px; }
+    .checklist li::before { content: "☐"; color: var(--gray); font-size: 18px; }
+    .checklist li.done::before { content: "☑"; color: var(--accent2); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--dark-border);
+      padding: 40px 0; text-align: center;
+      color: var(--gray); font-size: 13px;
+    }
+
+    /* TAG CLOUD */
+    .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag-cloud span { padding: 4px 14px; border-radius: 100px; font-size: 12px; background: rgba(139,92,246,0.1); color: var(--accent); border: 1px solid rgba(139,92,246,0.2); }
+
+    /* MODAL OVERLAY */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--dark-card); border: 1px solid var(--dark-border); border-radius: 16px; max-width: 600px; width: 100%; max-height: 80vh; overflow-y: auto; padding: 32px; }
+    .modal h3 { font-family: 'Orbitron', sans-serif; margin-bottom: 16px; }
+    .modal p { color: var(--gray-light); font-size: 14px; line-height: 1.8; }
+    .modal .close-btn { float: right; background: none; border: none; color: var(--white); font-size: 24px; cursor: pointer; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-up { animation: fadeUp .6s ease forwards; }
+
+    .highlight { color: var(--accent2); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="container">
+      <span class="logo-text">ITSound</span>
+      <button class="hamburger" onclick="document.querySelector('nav ul').classList.toggle('open')">
+        <span></span><span></span><span></span>
+      </button>
+      <ul>
+        <li><a href="#identity">Identity</a></li>
+        <li><a href="#strategia">Strategia</a></li>
+        <li><a href="#contenuti">Contenuti</a></li>
+        <li><a href="#territorio">Territorio</a></li>
+        <li><a href="#sito">Fix Sito</a></li>
+        <li><a href="#risorse">Risorse</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <div class="tag">Record Label — Martina Franca</div>
+      <h1>ITSound<br />Brand Portal</h1>
+      <p>La cassetta degli attrezzi per costruire la comunicazione della nostra label. Marco & Andrea, questo è il vostro hub.</p>
+      <div class="btn-group">
+        <a class="btn btn-primary" href="#identity">Esplora</a>
+        <a class="btn btn-outline" href="#contenuti">Post Pronti</a>
+        <a class="btn btn-outline" href="#risorse">Download</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- IDENTITY -->
+  <section id="identity">
+    <div class="container">
+      <div class="section-divider"></div>
+      <h2>Brand Identity</h2>
+      <p class="subtitle">Colori, font, logo e tono di voce — tutto ciò che definisce l'immagine di ITSound.</p>
+
+      <h3 style="font-size:18px;font-weight:600;margin-bottom:16px;">Palette Colori</h3>
+      <div class="swatches" style="margin-bottom:40px;">
+        <div class="swatch" style="background:#0A0A0A;color:#fff;"><span>#0A0A0A</span><span>Nero</span></div>
+        <div class="swatch" style="background:#FFFFFF;color:#000;"><span>#FFFFFF</span><span>Bianco</span></div>
+        <div class="swatch" style="background:#8B5CF6;color:#fff;"><span>#8B5CF6</span><span>Viola</span></div>
+        <div class="swatch" style="background:#06D6A0;color:#000;"><span>#06D6A0</span><span>Cyan</span></div>
+        <div class="swatch" style="background:#6B7280;color:#fff;"><span>#6B7280</span><span>Grigio</span></div>
+      </div>
+
+      <h3 style="font-size:18px;font-weight:600;margin-bottom:16px;">Font</h3>
+      <div class="font-demo" style="margin-bottom:40px;">
+        <div class="font-box">
+          <div class="label">Titoli — Orbitron</div>
+          <div class="sample-title font-orbitron">Techno Night</div>
+          <div class="sample-body font-orbitron" style="font-size:14px;">ABCDEFGHIJKLMNOPQRSTUVWXYZ</div>
+        </div>
+        <div class="font-box">
+          <div class="label">Testi — Inter</div>
+          <div class="sample-title font-inter" style="font-size:28px;font-weight:600;">Da Martina Franca</div>
+          <div class="sample-body font-inter" style="font-size:14px;">abcdefghijklmnopqrstuvwxyz 0123456789</div>
+        </div>
+      </div>
+
+      <h3 style="font-size:18px;font-weight:600;margin-bottom:16px;">Tono di Voce</h3>
+      <div class="grid-3" style="margin-bottom:32px;">
+        <div class="card">
+          <div class="icon">🇮🇹</div>
+          <h3>Italiano (primario)</h3>
+          <p>Il territorio parla italiano. Usiamo la nostra lingua per comunicare con artisti e locali della Puglia.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🇬🇧</div>
+          <h3>Inglese (secondario)</h3>
+          <p>Per reach internazionale, collaborazioni estere e piattaforme globali.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🎯</div>
+          <h3>Personalità</h3>
+          <p>Ambizioso, autentico, concreto. "Noi" non "Io". Appassionato ma senza fronzoli.</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h3>Esempi di Copy</h3>
+        <ul>
+          <li>"Da Martina Franca al mondo. Un passo alla volta."</li>
+          <li>"We collaborate with ambitious DJs and producers."</li>
+          <li>"La tua musica merita di essere ascoltata. Parliamone."</li>
+          <li>"From Puglia with love. 🎵"</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Formati Immagine</h3>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Piattaforma</th><th>Dimensioni</th><th>Formato</th></tr>
+            <tr><td>Instagram Post</td><td>1080 x 1080 px</td><td>Quadrato</td></tr>
+            <tr><td>Instagram Reel</td><td>1080 x 1920 px</td><td>Verticale</td></tr>
+            <tr><td>Instagram Story</td><td>1080 x 1920 px</td><td>Verticale</td></tr>
+            <tr><td>Sito — Hero</td><td>1920 x 800 px</td><td>Orizzontale</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STRATEGIA -->
+  <section id="strategia" style="background:var(--dark-card);">
+    <div class="container">
+      <div class="section-divider"></div>
+      <h2>Roadmap 6 Mesi</h2>
+      <p class="subtitle">Fase 1: Fondamenta → Fase 2: Territorio → Fase 3: Crescita</p>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="month">Mese 1</div>
+          <h4>Fondamenta</h4>
+          <p>Brand identity, fix sito WordPress, setup Instagram, Google My Business, strumenti gratuiti.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="month">Mese 2-3</div>
+          <h4>Territorio & Contenuti</h4>
+          <p>Social 3x settimana, rete locale (locali, artisti), demo submission system, blog in italiano.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="month">Mese 4-6</div>
+          <h4>Uscite & Crescita</h4>
+          <p>Prima release su Spotify, campagna lancio, nuovi artisti, eventi locali, playlist pitching.</p>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-top:40px;">
+        <div class="card">
+          <div class="icon">🎯</div>
+          <h3>Obiettivo #1</h3>
+          <p><strong>Visibilità sul territorio</strong> — Martina Franca, Valle d'Itria, Puglia</p>
+        </div>
+        <div class="card">
+          <div class="icon">💿</div>
+          <h3>Obiettivo #2</h3>
+          <p><strong>Uscite discografiche</strong> — Distribuzione streaming, primo release</p>
+        </div>
+        <div class="card">
+          <div class="icon">🎤</div>
+          <h3>Obiettivo #3</h3>
+          <p><strong>Nuovi artisti in label</strong> — Scouting locale, open call</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:32px;">
+        <h3>Budget Mensile Consigliato</h3>
+        <div class="table-wrap" style="margin-top:12px;">
+          <table>
+            <tr><th>Voce</th><th>Costo</th></tr>
+            <tr><td>Canva Pro (opzionale)</td><td>~12€</td></tr>
+            <tr><td>Ads Instagram (territorio)</td><td>~30-50€</td></tr>
+            <tr><td>Distribuzione streaming</td><td>~2€/mese</td></tr>
+            <tr><td><strong>TOTALE</strong></td><td><strong>~44-64€/mese</strong></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTENUTI -->
+  <section id="contenuti">
+    <div class="container">
+      <div class="section-divider"></div>
+      <h2>Contenuti Pronti</h2>
+      <p class="subtitle">6 post già scritti per ripartire da zero. Prendeteli e pubblicateli così come sono.</p>
+
+      <div class="post-card">
+        <div class="post-header">
+          <span class="badge">Post #1 — Lancio</span>
+          <span style="color:var(--gray);font-size:12px;">IG + FB</span>
+        </div>
+        <h4>Chi siamo</h4>
+        <div class="caption">🎵 Finalmente ci presentiamo.
+
+ITSound nasce a Martina Franca con una missione semplice: dare voce ai talenti musicali del nostro territorio.
+
+Siamo Marco e Andrea, due ragazzi che credono che la musica elettronica e non solo possa unire persone, creare connessioni e costruire qualcosa di vero.
+
+Offriamo servizi di:
+🎛 Mixing & Mastering
+👻 Ghost Production
+📢 Track Placement & Promotion
+📱 Social Network Management
+🎨 Graphic Design
+💡 Consulting
+
+Se sei un DJ, un producer o un artista e vuoi collaborare, sei nel posto giusto.
+
+🔗 Link in bio per scoprire tutti i servizi</div>
+        <div class="hashtags">
+          <span>#ITSound</span><span>#MartinaFranca</span><span>#RecordLabel</span><span>#PugliaMusic</span><span>#MusicaElettronica</span><span>#DJ</span><span>#Producer</span><span>#ValleDItria</span>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-header">
+          <span class="badge">Post #2 — Reel Territorio</span>
+          <span style="color:var(--gray);font-size:12px;">IG Reel</span>
+        </div>
+        <h4>Il nostro territorio</h4>
+        <div class="caption">📍 Martina Franca 🌿 — Il cuore pulsante di ITSound.
+
+Siamo orgogliosi di essere una label nata qui, in Valle d'Itria. La nostra musica parte da queste strade e vuole arrivare ovunque.
+
+Sei della zona e fai musica? Scrivici, collaboriamo.</div>
+        <div class="hashtags">
+          <span>#MartinaFranca</span><span>#Puglia</span><span>#ValleDItria</span><span>#ITSound</span><span>#MusicaPugliese</span><span>#ElectronicMusic</span><span>#Techno</span>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-header">
+          <span class="badge">Post #3 — Carousel Servizi</span>
+          <span style="color:var(--gray);font-size:12px;">IG Carousel</span>
+        </div>
+        <h4>I nostri servizi</h4>
+        <div class="caption">🎚 Trasforma la tua musica con ITSound
+
+Non sei sicuro di cosa ti serve? Ecco cosa offriamo:
+
+1️⃣ Mixing & Mastering — Il tuo suono al livello successivo
+2️⃣ Ghost Production — Beat professionali per te
+3️⃣ Track Placement — La tua musica sulle playlist giuste
+4️⃣ Track Promotion — Visibilità per i tuoi brani
+5️⃣ Social Network Management — La tua presenza online
+6️⃣ Graphic Design — Copertine e visual che colpiscono
+
+👉 Tutti i servizi su itsound.it/shop</div>
+        <div class="hashtags">
+          <span>#ITSound</span><span>#MixingMastering</span><span>#GhostProduction</span><span>#MusicProduction</span><span>#RecordingStudio</span><span>#MartinaFranca</span>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-header">
+          <span class="badge">Post #4 — Artista</span>
+          <span style="color:var(--gray);font-size:12px;">IG + FB</span>
+        </div>
+        <h4>Marco Carbotti — Primo artista</h4>
+        <div class="caption">🎧 Il nostro founder e primo artista: Marco Carbotti
+
+DJ e producer techno, Marco è la mente musicale dietro ITSound. Le sue tracce uniscono sonorità elettroniche con l'energia del territorio.
+
+Ascolta "Make You Mine" e "Mr. Saxobeat - Techno Mix" su Spotify e tutte le piattaforme.
+
+🔗 Link in bio</div>
+        <div class="hashtags">
+          <span>#Techno</span><span>#TechHouse</span><span>#MarcoCarbotti</span><span>#ITSound</span><span>#DJLife</span><span>#ProducerLife</span><span>#MartinaFranca</span>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-header">
+          <span class="badge">Post #5 — Call to Artists</span>
+          <span style="color:var(--gray);font-size:12px;">IG Reel</span>
+        </div>
+        <h4>Cerchiamo talenti</h4>
+        <div class="caption">🎤 Cerchiamo nuovi talenti.
+
+Sei un DJ, producer, cantante o musicista della Puglia?
+Vuoi far parte di una label che cresce?
+
+Manda il tuo demo a labelsubmission@itsound.it
+
+Non vediamo l'ora di ascoltarti. 🎵</div>
+        <div class="hashtags">
+          <span>#CallForArtists</span><span>#OpenCall</span><span>#MusicLabel</span><span>#Puglia</span><span>#MartinaFranca</span><span>#NewTalent</span><span>#ITSound</span>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <div class="post-header">
+          <span class="badge">Post #6 — Valori</span>
+          <span style="color:var(--gray);font-size:12px;">IG Carousel</span>
+        </div>
+        <h4>Perché ITSound?</h4>
+        <div class="caption">🎯 Perché ITSound?
+
+Perché non siamo solo una label. Siamo un team che lavora con te, passo dopo passo.
+
+✅ Conosciamo il mercato locale e internazionale
+✅ Offriamo servizi completi (produzione, mixing, promo, social)
+✅ Collaboriamo con artisti di tutto il mondo
+✅ Siamo ambiziosi, ma partiamo dalle cose concrete
+
+👉 Scrivici e raccontaci il tuo progetto</div>
+        <div class="hashtags">
+          <span>#ITSound</span><span>#MusicLabel</span><span>#MusicProduction</span><span>#Puglia</span><span>#MartinaFranca</span><span>#ElectronicMusic</span>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:24px;">
+        <h3>Calendario Prima Settimana</h3>
+        <div class="cal-grid" style="margin-top:16px;">
+          <div class="cal-item">
+            <div class="day">Lunedì</div>
+            <div class="content">Post #1</div>
+            <div class="type">Chi siamo</div>
+          </div>
+          <div class="cal-item">
+            <div class="day">Mercoledì</div>
+            <div class="content">Reel #2</div>
+            <div class="type">Territorio</div>
+          </div>
+          <div class="cal-item">
+            <div class="day">Venerdì</div>
+            <div class="content">Post #3</div>
+            <div class="type">Servizi</div>
+          </div>
+        </div>
+        <p style="color:var(--gray-light);font-size:13px;margin-top:12px;">Format fissi: Lunedì Reel · Mercoledì Post · Venerdì Reel</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TERRITORIO -->
+  <section id="territorio" style="background:var(--dark-card);">
+    <div class="container">
+      <div class="section-divider"></div>
+      <h2>Piano Territorio</h2>
+      <p class="subtitle">Come connettersi con Martina Franca, la Valle d'Itria e tutta la Puglia.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="icon">🏪</div>
+          <h3>Locali & Pub</h3>
+          <p>Andate di persona (non via DM). Portate una chiavetta USB con logo ITSound. Proposta: "Facciamo una serata ITSound qui".</p>
+          <ul style="margin-top:12px;">
+            <li>Pub in Corso XX Settembre</li>
+            <li>Locali in Piazza Plebiscito</li>
+            <li>Circoli ARCI in zona</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="icon">🎵</div>
+          <h3>Scuole & Talenti</h3>
+          <p>Scovate artisti locali su Instagram cercando #musicapuglia #djmartinafranca. Contattateli con un messaggio genuino.</p>
+        </div>
+        <div class="card">
+          <div class="icon">📸</div>
+          <h3>Collaborazioni Locali</h3>
+          <p>Fotografi, videomaker, street artist, negozi del centro — scambiate servizi per visibilità.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🗺️</div>
+          <h3>Google My Business</h3>
+          <p>Create subito il profilo Google. Categoria: "Record Label". Fatevi trovare su Google Maps come ITSound a Martina Franca.</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:24px;">
+        <h3>Primi 3 Passi nel Territorio (questa settimana)</h3>
+        <ol style="margin-top:12px;padding-left:20px;color:var(--gray-light);font-size:14px;">
+          <li style="margin-bottom:8px;"><strong>Google My Business</strong> — 5 minuti, fatelo ora</li>
+          <li style="margin-bottom:8px;"><strong>Andate in 1 locale</strong> del centro e parlate con il titolare</li>
+          <li style="margin-bottom:8px;"><strong>Post su Instagram</strong> con geotag di Martina Franca</li>
+        </ol>
+      </div>
+
+      <div class="card" style="margin-top:16px;">
+        <h3>Hashtag Locali</h3>
+        <div class="tag-cloud" style="margin-top:12px;">
+          <span>#MartinaFranca</span><span>#Puglia</span><span>#ValleDItria</span><span>#PugliaMusic</span>
+          <span>#MusicPuglia</span><span>#DJMartinaFranca</span><span>#ElectronicPuglia</span>
+          <span>#SudItalia</span><span>#Locorotondo</span><span>#Cisternino</span><span>#Ostuni</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FIX SITO -->
+  <section id="sito">
+    <div class="container">
+      <div class="section-divider"></div>
+      <h2>Fix Sito WordPress</h2>
+      <p class="subtitle">Cose da sistemare SUBITO nel backend di itsound.it</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="icon">💰</div>
+          <h3>Prezzi Shop</h3>
+          <p>Tutti i servizi sono a 0,00€. Mettete "Richiedi preventivo" o prezzi reali. Entrate in WooCommerce > Prodotti e sistemate uno per uno.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🔗</div>
+          <h3>Link Rotti</h3>
+          <p>Il footer punta a rawtracks.qodeinteractive.com (tema demo). Andate in Aspetto > Widget e sostituite con link ITSound.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🐦</div>
+          <h3>Twitter</h3>
+          <p>Il link a Twitter (#) non porta a nulla. Toglietelo dal footer se non lo usate.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🔍</div>
+          <h3>SEO</h3>
+          <p>Installate RankMath (gratis). Impostate title e meta description per ogni pagina in italiano.</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:24px;">
+        <h3>Checklist Sito</h3>
+        <ul class="checklist">
+          <li>Prezzi shop sistemati (no 0,00€)</li>
+          <li>Link rawtracks rimossi dal footer</li>
+          <li>Twitter rimosso</li>
+          <li>RankMath installato e configurato</li>
+          <li>Polylang per italiano + inglese (o almeno home in italiano)</li>
+          <li>Form demo creato (WPForms gratuito)</li>
+          <li>Google My Business attivo</li>
+          <li>Favicon aggiunta</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- RISORSE -->
+  <section id="risorse" style="background:var(--dark-card);">
+    <div class="container">
+      <div class="section-divider"></div>
+      <h2>Risorse & Strumenti</h2>
+      <p class="subtitle">Tutto ciò che vi serve, quasi tutto gratuito.</p>
+
+      <div class="table-wrap">
+        <table>
+          <tr><th>Tool</th><th>Cosa fa</th><th>Costo</th></tr>
+          <tr><td>Canva</td><td>Template grafici per social</td><td>Gratis</td></tr>
+          <tr><td>CapCut</td><td>Montaggio reel</td><td>Gratis</td></tr>
+          <tr><td>Meta Business Suite</td><td>Programmazione post</td><td>Gratis</td></tr>
+          <tr><td>Google My Business</td><td>Presenza su Google Maps</td><td>Gratis</td></tr>
+          <tr><td>RouteNote</td><td>Distribuzione streaming</td><td>Gratis</td></tr>
+          <tr><td>DistroKid</td><td>Distribuzione streaming</td><td>$22.99/anno</td></tr>
+          <tr><td>RankMath</td><td>SEO WordPress</td><td>Gratis</td></tr>
+          <tr><td>WPForms Lite</td><td>Form WordPress</td><td>Gratis</td></tr>
+        </table>
+      </div>
+
+      <div class="card" style="margin-top:32px;">
+        <h3>Demo Submission — Template Email</h3>
+        <div style="margin-top:16px;">
+          <p style="font-weight:600;color:var(--accent2);margin-bottom:8px;">Oggetto: Grazie per averci inviato la tua demo! 🎵</p>
+          <div class="caption" style="margin-bottom:20px;">Ciao [Nome],
+
+Grazie per aver inviato la tua demo a ITSound! 🎵
+
+Abbiamo ricevuto il tuo materiale e il nostro team lo ascolterà con attenzione.
+
+⏱ Ti risponderemo entro 7-10 giorni.
+
+Cosa valutiamo:
+- Qualità della produzione
+- Originalità del sound
+- Coerenza con la nostra identità
+
+Nel frattempo, seguici su Instagram @it.sound_ per rimanere aggiornato.
+
+A presto,
+Marco & Andrea
+ITSound — Martina Franca
+itsound.it</div>
+        </div>
+        <p style="font-size:13px;color:var(--gray-light);">Tutti i template (accettazione, rifiuto, criteri di valutazione) sono nel file DEMO_SUBMISSION_SYSTEM.md</p>
+      </div>
+
+      <div class="card" style="margin-top:16px;">
+        <h3>Distribuzione Streaming — Prima Uscita Checklist</h3>
+        <ul class="checklist">
+          <li>Traccia pronta (mixata + masterizzata)</li>
+          <li>Copertina 3000x3000 px</li>
+          <li>ISRC (lo assegna il distributore)</li>
+          <li>Metadata corretti</li>
+          <li>Spotify for Artists: profilo rivendicato</li>
+          <li>Grafiche social pronte (Canva)</li>
+          <li>Piano promozione (post, reel, ads)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <p style="font-family:'Orbitron',monospace;font-weight:700;margin-bottom:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">ITSound</p>
+      <p>Martina Franca — Record Label & Music Services</p>
+      <p style="margin-top:8px;">Marco Carbotti · Andrea Maggi · <a href="https://itsound.it">itsound.it</a> · <a href="https://instagram.com/it.sound_">@it.sound_</a></p>
+      <p style="margin-top:16px;font-size:11px;">Brand Portal v1.0 — creato per il team ITSound</p>
+    </div>
+  </footer>
+
+  <script>
+    // Chiudi menu mobile al click
+    document.querySelectorAll('nav ul li a').forEach(a => {
+      a.addEventListener('click', () => {
+        document.querySelector('nav ul').classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>

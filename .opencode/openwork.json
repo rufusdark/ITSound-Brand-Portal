@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "workspace": {
+    "name": "ITSOUND.IT",
+    "createdAt": 1781016559225,
+    "preset": "starter"
+  },
+  "authorizedRoots": [
+    "/home/rufusdark/ITSOUND.IT"
+  ],
+  "reload": null
+}
