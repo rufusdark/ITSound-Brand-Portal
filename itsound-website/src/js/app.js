@@ -1,6 +1,7 @@
 import { initCursor } from './cursor.js';
 import { initHero } from './hero.js';
 import { initHeroAnimation } from './hero-animation.js';
+import { initHeroParticles } from './hero-particles.js';
 import { initAnimations } from './animations.js';
 import { initNavigation } from './navigation.js';
 import { initSmoothScroll } from './scroll.js';
@@ -17,6 +18,7 @@ function init() {
   initSmoothScroll();
   initHero();
   initHeroAnimation();
+  initHeroParticles();
   initPlayer();
   
   setTimeout(initAnimations, 200);

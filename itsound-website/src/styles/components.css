@@ -213,13 +213,21 @@
   display: flex; gap: 16px; flex-wrap: wrap;
 }
 
-/* Hero Waveform Animation (subtle) */
+/* Hero Particles */
+.hero-particles {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Hero EQ Waveform Animation */
 .hero-waveform {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   z-index: 2;
   pointer-events: none;
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
 /* Decorative Elements (Frame 21 style) */
@@ -783,6 +791,15 @@
   font-size: 0.75rem;
   color: var(--text-secondary);
   display: block;
+  margin-bottom: 2px;
+}
+.its-player-genre {
+  display: block;
+  font-size: 0.6rem;
+  font-family: var(--font-display);
+  color: var(--purple-light);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
   margin-bottom: 10px;
 }
 
