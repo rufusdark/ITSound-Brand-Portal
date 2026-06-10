@@ -156,6 +156,7 @@
 .hero-content {
   position: relative; z-index: 3;
   max-width: 720px;
+  width: 100%;
   padding: 120px 40px 80px;
   text-align: left;
 }
@@ -873,6 +874,10 @@
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .stats-row { gap: 28px; }
   .stat-num { font-size: 1.4rem; }
+  .its-player {
+    bottom: 40px; right: 24px;
+    width: 300px;
+  }
 }
 @media (max-width: 768px) {
   .nav-links {
@@ -890,11 +895,13 @@
   .hamburger { display: flex; }
   .hero-subtitle br { display: none; }
   .hero-actions .btn { width: 100%; }
+  .hero { flex-direction: column; justify-content: flex-start; align-items: stretch; }
+  .hero-content { padding: 100px 24px 24px; }
   .its-player {
     position: relative;
     bottom: auto; right: auto;
-    width: 100%;
-    margin-top: 24px;
+    width: calc(100% - 48px);
+    margin: 0 24px 24px;
   }
   .footer-grid { grid-template-columns: 1fr; }
   .territory-cards { grid-template-columns: 1fr; }
