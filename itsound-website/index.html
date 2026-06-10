@@ -32,17 +32,33 @@
     </div>
   </div>
 
-  <!-- Navigation -->
+  <!-- Navigation Island -->
   <nav class="navbar" id="navbar">
-    <div class="container">
-      <a href="#" class="nav-logo">
-        <img src="/logo.png" alt="ITSound" class="nav-logo-img" />
+    <div class="nav-island">
+      <a href="#" class="nav-logo" aria-label="ITSound Home">
+        <svg class="nav-logo-svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <circle cx="14" cy="14" r="13" stroke="url(#logoGrad)" stroke-width="1.5"/>
+          <text x="14" y="19" text-anchor="middle" fill="url(#logoGrad)" font-family="Orbitron" font-weight="800" font-size="16">i</text>
+          <defs>
+            <linearGradient id="logoGrad" x1="0" y1="0" x2="28" y2="28">
+              <stop offset="0%" stop-color="#8B5CF6"/>
+              <stop offset="100%" stop-color="#A78BFA"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="nav-logo-text">i<span class="text-accent">T</span>Sound</span>
       </a>
       <div class="nav-links" id="navLinks">
+        <a href="#hero" class="nav-link active">Home</a>
+        <span class="nav-divider"></span>
         <a href="#about" class="nav-link">Label</a>
+        <span class="nav-divider"></span>
         <a href="#artists" class="nav-link">Artisti</a>
+        <span class="nav-divider"></span>
         <a href="#releases" class="nav-link">Release</a>
+        <span class="nav-divider"></span>
         <a href="#services" class="nav-link">Servizi</a>
+        <span class="nav-divider"></span>
         <a href="#contact" class="nav-link nav-cta">Contatti</a>
       </div>
       <button class="hamburger" id="hamburger" aria-label="Menu">
@@ -50,6 +66,31 @@
       </button>
     </div>
   </nav>
+
+  <!-- Mobile Overlay Menu -->
+  <div class="mobile-overlay" id="mobileOverlay">
+    <div class="mobile-overlay-bg"></div>
+    <div class="mobile-overlay-content">
+      <div class="mobile-overlay-header">
+        <span class="mobile-overlay-label">Navigazione</span>
+      </div>
+      <nav class="mobile-nav">
+        <a href="#hero" class="mobile-nav-link" data-index="0"><span class="mobile-nav-num">01</span>Home</a>
+        <a href="#about" class="mobile-nav-link" data-index="1"><span class="mobile-nav-num">02</span>Label</a>
+        <a href="#artists" class="mobile-nav-link" data-index="2"><span class="mobile-nav-num">03</span>Artisti</a>
+        <a href="#releases" class="mobile-nav-link" data-index="3"><span class="mobile-nav-num">04</span>Release</a>
+        <a href="#services" class="mobile-nav-link" data-index="4"><span class="mobile-nav-num">05</span>Servizi</a>
+        <a href="#contact" class="mobile-nav-link mobile-nav-cta" data-index="5"><span class="mobile-nav-num">06</span>Contatti</a>
+      </nav>
+      <div class="mobile-overlay-footer">
+        <span class="mobile-overlay-slogan">Record Label — Martina Franca</span>
+        <div class="mobile-overlay-social">
+          <a href="https://www.instagram.com/it.sound_/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.facebook.com/profile.php?id=61568625212052" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- HERO — Frame 21 design -->
   <section class="hero" id="hero">
