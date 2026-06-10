@@ -463,7 +463,7 @@
 .hero-line-1 .char,
 .hero-line-2,
 .hero-subtitle,
-.hero-actions,
+.hero-actions .btn,
 .its-player,
 .scroll-indicator {
   opacity: 0;
