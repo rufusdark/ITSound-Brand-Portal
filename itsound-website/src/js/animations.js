@@ -13,20 +13,22 @@ export function initAnimations() {
   heroTL
     .fromTo('.hero-badge', { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, 0.3);
 
-  // Hero title: split reveal with scale
+  // Hero title — split letter stagger reveal
   heroTL
-    .fromTo('.hero-line-1', {
-      y: 100,
+    .fromTo('.hero-line-1 .char', {
+      y: 80,
       opacity: 0,
-      scale: 0.9,
-      filter: 'blur(8px)',
+      rotateZ: 12,
+      filter: 'blur(6px)',
     }, {
       y: 0,
       opacity: 1,
-      scale: 1,
+      rotateZ: 0,
       filter: 'blur(0px)',
-      duration: 1.2,
-    }, 0.5)
+      duration: 0.7,
+      stagger: 0.06,
+      ease: 'power3.out',
+    }, 0.35)
 
     .fromTo('.hero-line-2', {
       y: 80,
@@ -37,7 +39,7 @@ export function initAnimations() {
       opacity: 1,
       x: 0,
       duration: 1,
-    }, 0.7);
+    }, 0.8);
 
   // Subtitle
   heroTL

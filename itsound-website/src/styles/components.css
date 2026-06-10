@@ -458,6 +458,17 @@
   text-align: left;
 }
 
+/* Hidden until GSAP reveal — prevents flash */
+.hero-badge,
+.hero-line-1 .char,
+.hero-line-2,
+.hero-subtitle,
+.hero-actions,
+.its-player,
+.scroll-indicator {
+  opacity: 0;
+}
+
 /* Badge */
 .hero-badge {
   display: inline-flex; align-items: center; gap: 10px;
@@ -503,6 +514,10 @@
 }
 .hero-line-1 {
   letter-spacing: -2px;
+}
+.hero-line-1 .char {
+  display: inline-block;
+  will-change: transform, opacity, filter;
 }
 .hero-line-2 {
   font-weight: 700;
