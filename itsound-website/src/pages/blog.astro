@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import HeroSection from '../components/HeroSection.astro';
+import BlogCard from '../components/BlogCard.astro';
+
+const posts = await getCollection('blog');
+posts.sort((a, b) => {
+  const months = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+  const aIdx = months.indexOf(a.data.date.split(' ')[0]);
+  const bIdx = months.indexOf(b.data.date.split(' ')[0]);
+  return bIdx - aIdx;
+});
+---
+
+<Layout title="Blog">
+  <HeroSection
+    badge="Label News"
+    title="Blog"
+    highlight="& News"
+    subtitle="Aggiornamenti, guide, interviste e novità dalla label."
+  />
+
+  <section class="py-16 section-reveal" style="background: #141414;">
+    <div class="container-custom">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 stagger-children stagger-gsap">
+        {posts.map((post) => {
+          const slug = post.id.replace(/\.(mdx|md)$/, '');
+          return (
+          <BlogCard
+            title={post.data.title}
+            excerpt={post.data.excerpt}
+            category={post.data.category}
+            date={post.data.date}
+            slug={slug}
+          />
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+</Layout>

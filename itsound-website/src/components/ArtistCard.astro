@@ -1,0 +1,116 @@
+---
+interface Props {
+  name: string;
+  genre: string;
+  role: string;
+  slug: string;
+  releases: string[];
+  spotify?: string;
+  soundcloud?: string;
+  instagram?: string;
+}
+const { name, genre, role, slug, releases, spotify, soundcloud, instagram } = Astro.props;
+---
+
+<a href={`/artisti/${slug}`} class="artist-card card-3d reveal block" data-reveal="fade-up">
+  <div class="card-3d-inner">
+    <div class="artist-avatar">
+      <span class="text-2xl font-display font-bold">{name.charAt(0)}</span>
+    </div>
+    <h3>{name}</h3>
+    <p class="role-tag">{role}</p>
+    <p class="genre-tag">{genre}</p>
+
+    {releases.length > 0 && (
+      <div class="mt-4">
+        <p class="text-xs text-gray font-display uppercase tracking-wider mb-2">Release</p>
+        <div class="flex flex-wrap gap-2">
+          {releases.map((r) => (
+            <span class="release-chip">{r}</span>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <div class="social-links mt-4" onclick="event.stopPropagation()">
+      {spotify && (
+        <a href={spotify} target="_blank" class="social-icon" aria-label="Spotify">
+          <i class="fab fa-spotify"></i>
+        </a>
+      )}
+      {soundcloud && (
+        <a href={soundcloud} target="_blank" class="social-icon" aria-label="SoundCloud">
+          <i class="fab fa-soundcloud"></i>
+        </a>
+      )}
+      {instagram && (
+        <a href={instagram} target="_blank" class="social-icon" aria-label="Instagram">
+          <i class="fab fa-instagram"></i>
+        </a>
+      )}
+    </div>
+  </div>
+</a>
+
+<style is:inline>
+  .artist-card {
+    background: #1A1A1A;
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 16px;
+    padding: 32px 24px;
+    text-align: center;
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .artist-card:hover {
+    border-color: rgba(139,92,246,0.15);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .artist-avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+    color: white;
+  }
+  .artist-card h3 {
+    font-family: 'Orbitron', monospace;
+    font-size: 1rem; font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .role-tag {
+    font-size: 0.78rem;
+    color: #8B5CF6;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .genre-tag {
+    font-size: 0.78rem;
+    color: #9CA3AF;
+  }
+  .release-chip {
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    background: rgba(139,92,246,0.1);
+    color: #A78BFA;
+    border-radius: 50px;
+  }
+  .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  .social-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.04);
+    display: flex; align-items: center; justify-content: center;
+    color: #6B7280;
+    font-size: 1rem;
+    transition: all 0.25s ease;
+  }
+  .social-icon:hover {
+    background: #8B5CF6;
+    color: white;
+  }
+</style>

@@ -1,0 +1,45 @@
+---
+interface Props {
+  badge: string;
+  title: string;
+  highlight: string;
+  subtitle: string;
+  badgeColor?: string;
+}
+const { badge, title, highlight, subtitle } = Astro.props;
+---
+
+<section class="py-24 relative overflow-hidden" style="background: #0A0A0A;">
+  <div class="absolute inset-0 opacity-5">
+    <div class="absolute inset-0" style="background-image: linear-gradient(rgba(139,92,246,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.05) 1px, transparent 1px); background-size: 60px 60px;"></div>
+  </div>
+  <div class="container-custom relative z-10">
+    <div class="hero-badge">
+      <span class="pulse-dot"></span>
+      {badge}
+    </div>
+    <h1 class="mb-6 hero-fade-in">{title} <span class="gradient-text">{highlight}</span></h1>
+    <p class="text-lg text-gray-light max-w-2xl hero-fade-in hero-fade-in-delay-1">
+      {subtitle}
+    </p>
+  </div>
+</section>
+
+<style is:inline>
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(139,92,246,0.1);
+    border: 1px solid rgba(139,92,246,0.2);
+    padding: 7px 16px;
+    border-radius: 50px;
+    font-size: 0.7rem; color: #A78BFA;
+    font-weight: 500; letter-spacing: 0.3px;
+    margin-bottom: 28px; backdrop-filter: blur(10px);
+  }
+  .hero-badge .pulse-dot {
+    width: 6px; height: 6px;
+    background: #06D6A0;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+</style>

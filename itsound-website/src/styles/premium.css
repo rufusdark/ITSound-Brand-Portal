@@ -1,0 +1,126 @@
+/* ═══════════════════════════════════════════
+   ITSOUND — Premium Effects
+   ═══════════════════════════════════════════ */
+
+/* ─── NOISE TEXTURE OVERLAY ─── */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  opacity: 0.03;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* ─── CUSTOM CURSOR ─── */
+.custom-cursor {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99999;
+  mix-blend-mode: difference;
+  transition: transform 0.15s ease;
+}
+
+.cursor-dot {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transition: width 0.3s, height 0.3s, background 0.3s;
+  transform: translate(-50%, -50%);
+}
+
+.cursor-ring {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transition: width 0.3s, height 0.3s, border-color 0.3s, background 0.3s;
+  transform: translate(-50%, -50%);
+}
+
+.cursor-ring.hover {
+  width: 64px;
+  height: 64px;
+  border-color: #8B5CF6;
+  background: rgba(139,92,246,0.08);
+}
+
+.cursor-ring.click {
+  transform: translate(-50%, -50%) scale(0.8);
+}
+
+/* ─── MAGNETIC BUTTON ─── */
+.magnetic-wrap {
+  display: inline-flex;
+  position: relative;
+}
+
+/* ─── HERO WAVEFORM ─── */
+@keyframes waveform {
+  0%, 100% { height: 4px; }
+  25% { height: 32px; }
+  50% { height: 12px; }
+  75% { height: 24px; }
+}
+
+.waveform-bar {
+  width: 3px;
+  background: linear-gradient(to top, #8B5CF6, #A78BFA);
+  border-radius: 3px;
+  animation: waveform var(--duration) ease-in-out infinite;
+  animation-delay: var(--delay);
+}
+
+/* ─── 3D CARD HOVER ─── */
+.card-3d {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.card-3d-inner {
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform-style: preserve-3d;
+}
+
+/* ─── SECTION REVEAL ─── */
+/* Opacity/transform gestiti interamente da GSAP via fromTo().
+   Nessun opacity:0 qui altrimenti GSAP non puo' animare verso opacity:1. */
+.section-reveal {
+  /* placeholder — GSAP gestisce tutto via fromTo esplicito */  
+}
+
+/* ─── SCROLL PROGRESS BAR ─── */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #8B5CF6, #A78BFA, #06D6A0);
+  z-index: 10001;
+  transition: width 0.1s linear;
+}
+
+/* ─── GLOW TEXT ─── */
+.glow-text {
+  text-shadow: 0 0 40px rgba(139,92,246,0.3), 0 0 80px rgba(139,92,246,0.1);
+}
+
+/* ─── REDUCED MOTION OVERRIDES ─── */
+@media (prefers-reduced-motion: reduce) {
+  .noise-overlay { display: none; }
+  .cursor-dot, .cursor-ring { display: none !important; }
+  body, a, button, .btn { cursor: auto !important; }
+  .waveform-bar { animation: none; }
+  .section-reveal { opacity: 1 !important; }
+}

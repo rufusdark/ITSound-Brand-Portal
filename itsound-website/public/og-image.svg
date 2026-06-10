@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A0A0A"/>
+      <stop offset="50%" stop-color="#1A1A1A"/>
+      <stop offset="100%" stop-color="#0A0A0A"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#06D6A0" stop-opacity="0.1"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#A78BFA"/>
+    </linearGradient>
+    <linearGradient id="sub" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#A78BFA"/>
+      <stop offset="100%" stop-color="#06D6A0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <!-- Decorative grid lines -->
+  <line x1="0" y1="315" x2="1200" y2="315" stroke="rgba(139,92,246,0.05)" stroke-width="1"/>
+  <line x1="600" y1="0" x2="600" y2="630" stroke="rgba(139,92,246,0.05)" stroke-width="1"/>
+  <!-- Purple gradient bar top -->
+  <rect x="0" y="0" width="1200" height="4" fill="url(#accent)"/>
+  <!-- Cyan gradient bar bottom -->
+  <rect x="0" y="626" width="1200" height="4" fill="url(#sub)"/>
+  <!-- Decorative circles -->
+  <circle cx="150" cy="150" r="200" fill="none" stroke="rgba(139,92,246,0.06)" stroke-width="1"/>
+  <circle cx="1050" cy="480" r="250" fill="none" stroke="rgba(6,214,160,0.06)" stroke-width="1"/>
+  <!-- Brand mark -->
+  <text x="60" y="310" font-family="'Orbitron', monospace" font-size="120" font-weight="700" fill="white" letter-spacing="-2">
+    <tspan fill="#8B5CF6">i</tspan>TSound
+  </text>
+  <text x="60" y="370" font-family="'Inter', sans-serif" font-size="22" fill="#9CA3AF" font-weight="300" letter-spacing="6">
+    RECORD LABEL
+  </text>
+  <text x="60" y="420" font-family="'Inter', sans-serif" font-size="16" fill="rgba(255,255,255,0.3)" font-weight="300" letter-spacing="2">
+    Martina Franca · Puglia
+  </text>
+  <!-- Waveform decoration -->
+  <g transform="translate(60, 460)" opacity="0.15">
+    <rect x="0" y="0" width="3" height="20" rx="1.5" fill="#8B5CF6"/>
+    <rect x="8" y="0" width="3" height="32" rx="1.5" fill="#8B5CF6"/>
+    <rect x="16" y="0" width="3" height="12" rx="1.5" fill="#8B5CF6"/>
+    <rect x="24" y="0" width="3" height="28" rx="1.5" fill="#8B5CF6"/>
+    <rect x="32" y="0" width="3" height="8" rx="1.5" fill="#8B5CF6"/>
+    <rect x="40" y="0" width="3" height="24" rx="1.5" fill="#8B5CF6"/>
+    <rect x="48" y="0" width="3" height="16" rx="1.5" fill="#8B5CF6"/>
+    <rect x="56" y="0" width="3" height="30" rx="1.5" fill="#06D6A0"/>
+    <rect x="64" y="0" width="3" height="10" rx="1.5" fill="#06D6A0"/>
+    <rect x="72" y="0" width="3" height="26" rx="1.5" fill="#06D6A0"/>
+  </g>
+</svg>

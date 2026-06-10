@@ -1,0 +1,232 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const servizi = [
+  {
+    id: 'mixing-mastering',
+    num: '/01',
+    icon: 'fa-sliders-h',
+    title: 'Mixing & Mastering',
+    desc: 'Portiamo il tuo suono al livello successivo. Mixing professionale e mastering per ogni genere musicale. Trattiamo ogni traccia con cura artigianale.',
+    features: ['Mixing stereo e stem', 'Mastering per streaming e vinile', 'Equalizzazione e compressione', 'Riversione e restauro audio']
+  },
+  {
+    id: 'ghost-production',
+    num: '/02',
+    icon: 'fa-ghost',
+    title: 'Ghost Production',
+    desc: 'Beat e produzioni professionali per DJ e artisti. Tracce personalizzate per il tuo sound. Lavoriamo in stretta collaborazione per capire la tua visione.',
+    features: ['Produzione track originali', 'Beat personalizzati', 'Topline e arrangiamenti', 'Consegna track pronte all\'uso']
+  },
+  {
+    id: 'track-placement',
+    num: '/03',
+    icon: 'fa-chart-line',
+    title: 'Track Placement',
+    desc: 'La tua musica sulle playlist giuste. Strategia di posizionamento per massima visibilità. Contatti diretti con curatori e label internazionali.',
+    features: ['Pitching playlist Spotify', 'Placement su blog e radio', 'Strategia di release', 'Networking con curatori']
+  },
+  {
+    id: 'track-promotion',
+    num: '/04',
+    icon: 'fa-bullhorn',
+    title: 'Track Promotion',
+    desc: 'Promuoviamo la tua musica su tutti i canali: social, playlist, blog e radio. Campagne mirate per far crescere il tuo pubblico.',
+    features: ['Promo social organica', 'Campagne adv mirate', 'Ufficio stampa digitale', 'Cross-promotion con artisti']
+  },
+  {
+    id: 'social-management',
+    num: '/05',
+    icon: 'fa-hashtag',
+    title: 'Social Management',
+    desc: 'Gestiamo la tua presenza social: contenuti, strategia, crescita organica e adv. Il tuo brand musicale raccontato ogni giorno.',
+    features: ['Content strategy', 'Creazione contenuti', 'Community management', 'Analytics e report']
+  },
+  {
+    id: 'graphic-design',
+    num: '/06',
+    icon: 'fa-paint-brush',
+    title: 'Graphic Design',
+    desc: 'Copertine, visual, logo, brand identity. La tua immagine al primo sguardo. Design professionale per la tua musica.',
+    features: ['Cover art e visual', 'Logo e brand identity', 'Contenuti social', 'Merch design']
+  },
+  {
+    id: 'web-design',
+    num: '/07',
+    icon: 'fa-code',
+    title: 'Web Design Musicale',
+    desc: 'Siti web per artisti, label e producer. Portfolio, EPK, landing page per release. Presenza online professionale.',
+    features: ['Siti artista e label', 'EPK digitale', 'Landing page release', 'SEO musicale']
+  },
+  {
+    id: 'marketing-consulting',
+    num: '/08',
+    icon: 'fa-lightbulb',
+    title: 'Marketing & Consulting',
+    desc: 'Consulenza strategica per la tua carriera musicale. Dalla brand identity alla strategia di release, ti guidiamo passo dopo passo.',
+    features: ['Strategia di carriera', 'Brand identity musicale', 'Piano di release', 'Consulenza one-to-one']
+  }
+];
+---
+
+<Layout title="Servizi">
+  <section class="py-24 relative overflow-hidden" style="background: #0A0A0A;">
+    <div class="absolute inset-0 opacity-5">
+      <div class="absolute inset-0" style="background-image: linear-gradient(rgba(139,92,246,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.05) 1px, transparent 1px); background-size: 60px 60px;"></div>
+    </div>
+    <div class="container-custom relative z-10">
+      <div class="hero-badge">
+        <span class="pulse-dot"></span>
+        I Nostri Servizi
+      </div>
+      <h1 class="mb-6 hero-fade-in">Servizi <span class="gradient-text">Professionali</span></h1>
+      <p class="text-lg text-gray-light max-w-2xl hero-fade-in hero-fade-in-delay-1">
+        Dalla produzione alla promozione, tutto ciò che serve per far decollare la tua musica.
+        Ogni servizio è personalizzato sulle tue esigenze.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-20 section-reveal" style="background: #141414;">
+    <div class="container-custom">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 stagger-children stagger-gsap">
+        {servizi.map((s) => (
+          <div class="service-card card-3d" id={s.id}>
+            <div class="card-3d-inner">
+              <div class="card-num">{s.num}</div>
+              <div class="icon-wrap"><i class={"fas " + s.icon}></i></div>
+              <h3>{s.title}</h3>
+              <p>{s.desc}</p>
+              <ul class="feature-list">
+                {s.features.map((f) => (
+                  <li><i class="fas fa-check text-accent"></i> {f}</li>
+                ))}
+              </ul>
+              <a href="/contatti?servizio={s.id}" class="card-link">Richiedi Preventivo <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Booking CTA -->
+  <section class="py-24 relative overflow-hidden text-center section-reveal" style="background: #0A0A0A;">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent/3 rounded-full blur-3xl"></div>
+    <div class="container-custom relative z-10 reveal">
+      <div class="section-label">/ Lavoriamo Insieme</div>
+      <h2 class="section-title">Non sai da dove <span class="gradient-text">iniziare?</span></h2>
+      <p class="section-sub mx-auto mt-4 mb-8">
+        Raccontaci cosa hai in mente. Ti aiutiamo a capire quale servizio fa per te.
+      </p>
+      <a href="/contatti" class="btn btn-primary">
+        Parla con Noi <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+  </section>
+
+  <style is:inline>
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(139,92,246,0.1);
+      border: 1px solid rgba(139,92,246,0.2);
+      padding: 7px 16px;
+      border-radius: 50px;
+      font-size: 0.7rem;
+      color: #A78BFA;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      margin-bottom: 28px;
+      backdrop-filter: blur(10px);
+    }
+    .hero-badge .pulse-dot {
+      width: 6px; height: 6px;
+      background: #06D6A0;
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .service-card {
+      background: #1A1A1A;
+      border: 1px solid rgba(255,255,255,0.04);
+      border-radius: 16px;
+      padding: 36px 28px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, rgba(139,92,246,0.03), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.6s;
+    }
+    .service-card:hover::before { opacity: 1; }
+    .service-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      border-color: rgba(139,92,246,0.1);
+    }
+    .service-card .icon-wrap {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, rgba(139,92,246,0.12), rgba(139,92,246,0.04));
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      color: #8B5CF6;
+      margin-bottom: 16px;
+      transition: all 0.4s;
+    }
+    .service-card:hover .icon-wrap {
+      background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+      color: white;
+      transform: scale(1.05);
+    }
+    .service-card .card-num {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.6rem; font-weight: 500;
+      color: #4B5563;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+    }
+    .service-card h3 {
+      font-family: 'Orbitron', monospace;
+      font-size: 1rem; font-weight: 600;
+      margin-bottom: 10px;
+      letter-spacing: 0.3px;
+    }
+    .service-card p {
+      font-size: 0.85rem;
+      color: #9CA3AF;
+      line-height: 1.7;
+    }
+    .feature-list {
+      list-style: none;
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .feature-list li {
+      font-size: 0.82rem;
+      color: #9CA3AF;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .feature-list li i { font-size: 0.65rem; }
+    .service-card .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 16px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: #8B5CF6;
+      transition: gap 0.25s ease;
+    }
+    .service-card:hover .card-link { gap: 12px; }
+  </style>
+</Layout>

@@ -1,0 +1,43 @@
+---
+interface Props {
+  href: string;
+  variant?: 'primary' | 'secondary' | 'ghost';
+  class?: string;
+  children?: any;
+}
+const { href, variant = 'primary', class: className = '' } = Astro.props;
+---
+
+<a href={href} class="magnetic-wrap btn btn-{variant} {className}" data-magnetic>
+  <span class="magnetic-inner">
+    <slot />
+  </span>
+</a>
+
+<script>
+document.querySelectorAll('[data-magnetic]').forEach((btn) => {
+  const inner = btn.querySelector('.magnetic-inner');
+  if (!inner) return;
+
+  btn.addEventListener('mousemove', (e) => {
+    const rect = btn.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    inner.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+  });
+
+  btn.addEventListener('mouseleave', () => {
+    inner.style.transform = 'translate(0, 0)';
+  });
+});
+</script>
+
+<style>
+.magnetic-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+</style>

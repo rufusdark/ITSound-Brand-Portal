@@ -1,0 +1,44 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="404 - Pagina Non Trovata">
+  <section class="min-h-screen flex items-center justify-center relative overflow-hidden" style="background: #0A0A0A;">
+    <div class="hero-glow"></div>
+    <div class="hero-watermark" aria-hidden="true">404</div>
+    <div class="container-custom text-center relative z-10">
+      <div class="text-9xl font-bold font-display text-accent mb-8 hero-fade-in">404</div>
+      <h2 class="text-3xl md:text-4xl font-bold mb-6 hero-fade-in hero-fade-in-delay-1">Pagina Non Trovata</h2>
+      <p class="text-lg text-gray-light mb-12 max-w-xl mx-auto hero-fade-in hero-fade-in-delay-2">
+        La pagina che stai cercando non esiste o è stata spostata. Torna alla homepage o esplora i nostri servizi.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center hero-fade-in hero-fade-in-delay-3">
+        <a href="/" class="btn btn-primary">Torna alla Home</a>
+        <a href="/servizi" class="btn btn-secondary">I Nostri Servizi</a>
+      </div>
+    </div>
+  </section>
+
+  <style is:inline>
+    .hero-glow {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(139,92,246,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-watermark {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(12rem, 40vw, 40rem);
+      font-weight: 900;
+      color: rgba(255,255,255,0.015);
+      pointer-events: none;
+      user-select: none;
+      line-height: 1;
+    }
+  </style>
+</Layout>

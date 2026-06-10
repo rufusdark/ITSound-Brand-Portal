@@ -1,0 +1,52 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import HeroSection from '../components/HeroSection.astro';
+import ArtistCard from '../components/ArtistCard.astro';
+import CTA from '../components/CTA.astro';
+
+const artists = await getCollection('artist');
+---
+
+<Layout title="Artisti">
+  <HeroSection
+    badge="Roster ITSound"
+    title="I Nostri"
+    highlight="Artisti"
+    subtitle="Scopri gli artisti che collaborano con ITSound. Talenti dalla Puglia e da tutto il mondo."
+  />
+
+  <section class="py-16 section-reveal" style="background: #141414;">
+    <div class="container-custom">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 stagger-children stagger-gsap">
+        {artists.map((artist) => {
+          const slug = artist.id.replace(/\.(mdx|md)$/, '');
+          const a = artist.data;
+          return (
+          <ArtistCard
+            name={a.name}
+            genre={a.genre}
+            role={a.role}
+            slug={slug}
+            releases={a.releases}
+            spotify={a.spotify}
+            soundcloud={a.soundcloud}
+            instagram={a.instagram}
+          />
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <CTA
+    label="/ Sei un Artista?"
+    title="Entra nel"
+    highlight="Roster"
+    subtitle="Vuoi entrare a far parte della famiglia ITSound? Inviaci il tuo demo."
+    ctaText="Invia il tuo Demo"
+    ctaHref="/contatti"
+  />
+
+</Layout>

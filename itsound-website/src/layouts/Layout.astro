@@ -1,0 +1,328 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import SmoothScroll from '../components/SmoothScroll.astro';
+import CustomCursor from '../components/CustomCursor.astro';
+import GsapAnimations from '../components/GsapAnimations.astro';
+import '../styles/global.css';
+import '../styles/animations.css';
+import '../styles/premium.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'ITSound — Record Label · Martina Franca. Mixing, mastering, ghost production e promozione musicale.' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#0A0A0A" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- OG Meta -->
+    <meta property="og:title" content={`${title} | ITSound`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="https://itsound.it/og-image.svg" />
+    <meta property="og:url" content="https://itsound.it" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={`${title} | ITSound`} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://itsound.it/og-image.svg" />
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <title>{title} | ITSound</title>
+
+    <ClientRouter />
+
+    <script is:inline data-astro-rerun>
+      // ── Navbar scroll class ──
+      document.addEventListener('astro:page-load', () => {
+        const navbar = document.getElementById('navbar');
+        const onScroll = () => {
+          if (window.scrollY > 60) navbar?.classList.add('scrolled');
+          else navbar?.classList.remove('scrolled');
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+
+        // ── Hamburger ──
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        if (hamburger && navLinks) {
+          hamburger.onclick = () => navLinks.classList.toggle('open');
+          document.querySelectorAll('.nav-links a').forEach(l => {
+            l.onclick = () => navLinks.classList.remove('open');
+          });
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <!-- NOISE OVERLAY → texture grana premium -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+    
+    <!-- SCROLL PROGRESS BAR -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+      <div class="container-custom">
+        <a href="/" class="nav-brand">
+          <span class="text-2xl font-bold font-display tracking-tight">
+            <span class="text-accent">i</span>TSound
+          </span>
+        </a>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="/" data-astro-prefetch>Home</a></li>
+          <li><a href="/artisti" data-astro-prefetch>Artisti</a></li>
+          <li><a href="/blog" data-astro-prefetch>Blog</a></li>
+          <li><a href="/eventi" data-astro-prefetch>Eventi</a></li>
+          <li><a href="/servizi" data-astro-prefetch>Servizi</a></li>
+          <li><a href="/contatti" class="nav-cta" data-astro-prefetch><i class="fas fa-envelope"></i> Contattaci</a></li>
+        </ul>
+        <div class="hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- MAIN -->
+    <main>
+      <slot />
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="container-custom">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="text-xl font-bold font-display tracking-tight mb-3">
+              <span class="text-accent">i</span>TSound
+            </div>
+            <p>Record label di Martina Franca. Collaboriamo con DJ, producer e artisti emergenti. Gli artisti in un unico posto.</p>
+            <div class="social-links mt-4">
+              <a href="https://www.instagram.com/it.sound_/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+              <a href="https://www.facebook.com/profile.php?id=61568625212052" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            </div>
+          </div>
+          <div>
+            <h5>Pagine</h5>
+            <ul>
+              <li><a href="/">Home</a></li>
+              <li><a href="/artisti">Artisti</a></li>
+              <li><a href="/blog">Blog</a></li>
+              <li><a href="/eventi">Eventi</a></li>
+              <li><a href="/servizi">Servizi</a></li>
+              <li><a href="/contatti">Contatti</a></li>
+            </ul>
+          </div>
+          <div>
+            <h5>Servizi</h5>
+            <ul>
+              <li><a href="/servizi">Mixing & Mastering</a></li>
+              <li><a href="/servizi">Ghost Production</a></li>
+              <li><a href="/servizi">Track Placement</a></li>
+              <li><a href="/servizi">Social Management</a></li>
+              <li><a href="/servizi">Graphic Design</a></li>
+            </ul>
+          </div>
+          <div>
+            <h5>Contatti</h5>
+            <ul>
+              <li><a href="mailto:m.carbotti@itsound.it">m.carbotti@itsound.it</a></li>
+              <li><a href="mailto:labelsubmission@itsound.it">labelsubmission@itsound.it</a></li>
+              <li><a href="https://www.instagram.com/it.sound_/" target="_blank">@it.sound_</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>&copy; 2026 ITSound — Martina Franca (TA)</span>
+          <span>Webmaster: <a href="https://www.instagram.com/andreamaggi27/">Andrea Maggi</a></span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- WHATSAPP FLOATING -->
+    <a href="https://wa.me/393317834748?text=Ciao%20ITSound%21%20Ho%20una%20domanda%20sui%20vostri%20servizi." class="whatsapp-float" target="_blank" aria-label="WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <style is:inline>
+      /* ─── NAVBAR ─── */
+      .navbar {
+        position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+        padding: 16px 0;
+        transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+      .navbar.scrolled {
+        background: rgba(10,10,10,0.92);
+        backdrop-filter: blur(24px) saturate(1.2);
+        padding: 10px 0;
+        box-shadow: 0 1px 40px rgba(0,0,0,0.3);
+      }
+      .navbar .container-custom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .nav-links {
+        display: flex;
+        list-style: none;
+        gap: 32px;
+        align-items: center;
+      }
+      .nav-links > li > a {
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: rgba(255,255,255,0.6);
+        transition: color 0.25s ease;
+        position: relative;
+        padding: 4px 0;
+        letter-spacing: 0.3px;
+      }
+      .nav-links > li > a::after {
+        content: '';
+        position: absolute;
+        bottom: -2px; left: 0;
+        width: 0; height: 1.5px;
+        background: #8B5CF6;
+        transition: width 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+      }
+      .nav-links > li > a:hover { color: white; }
+      .nav-links > li > a:hover::after { width: 100%; }
+      .nav-cta {
+        background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+        color: white !important;
+        padding: 10px 22px !important;
+        border-radius: 50px;
+        font-weight: 600 !important;
+        font-size: 0.78rem !important;
+        transition: all 0.25s ease !important;
+      }
+      .nav-cta::after { display: none !important; }
+      .nav-cta:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 25px rgba(139,92,246,0.3);
+      }
+      .hamburger {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        gap: 5px;
+        z-index: 1001;
+        padding: 4px;
+      }
+      .hamburger span {
+        width: 22px; height: 1.5px;
+        background: white;
+        transition: all 0.3s;
+        border-radius: 2px;
+      }
+
+      /* ─── FOOTER ─── */
+      .footer {
+        background: #0A0A0A;
+        color: rgba(255,255,255,0.4);
+        padding: 60px 0 28px;
+        border-top: 1px solid rgba(255,255,255,0.03);
+      }
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 48px;
+        margin-bottom: 40px;
+      }
+      .footer-brand p { font-size: 0.82rem; line-height: 1.7; }
+      .footer h5 {
+        font-family: 'Orbitron', monospace;
+        font-size: 0.65rem;
+        font-weight: 600;
+        color: white;
+        margin-bottom: 16px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+      }
+      .footer ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+      .footer ul a { font-size: 0.82rem; transition: color 0.25s ease; }
+      .footer ul a:hover { color: #8B5CF6; }
+      .footer .social-links {
+        display: flex;
+        gap: 10px;
+      }
+      .footer .social-links a {
+        width: 36px; height: 36px;
+        border-radius: 8px;
+        background: rgba(255,255,255,0.03);
+        display: flex; align-items: center; justify-content: center;
+        color: #6B7280;
+        font-size: 0.85rem;
+        transition: all 0.25s ease;
+      }
+      .footer .social-links a:hover {
+        background: #8B5CF6;
+        color: white;
+      }
+      .footer-bottom {
+        border-top: 1px solid rgba(255,255,255,0.03);
+        padding-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        font-size: 0.75rem;
+      }
+      .footer-bottom a { color: #8B5CF6; }
+
+      /* ─── RESPONSIVE ─── */
+      @media (max-width: 968px) {
+        .footer-grid { grid-template-columns: 1fr 1fr; }
+      }
+      @media (max-width: 768px) {
+        .nav-links {
+          position: fixed;
+          top: 0; right: -100%;
+          width: 280px;
+          height: 100vh;
+          background: rgba(10,10,10,0.98);
+          backdrop-filter: blur(30px);
+          flex-direction: column;
+          padding: 100px 32px 40px;
+          gap: 24px;
+          transition: right 0.45s cubic-bezier(0.25,0.46,0.45,0.94);
+          box-shadow: -20px 0 60px rgba(0,0,0,0.3);
+        }
+        .nav-links.open { right: 0; }
+        .hamburger { display: flex; }
+        .footer-grid { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 480px) {
+        .container-custom { padding: 0 20px; }
+      }
+    </style>
+
+    <!-- PREMIUM COMPONENTS -->
+    <SmoothScroll />
+    <CustomCursor />
+    <GsapAnimations />
+  </body>
+</html>

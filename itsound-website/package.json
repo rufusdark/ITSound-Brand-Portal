@@ -1,0 +1,24 @@
+{
+  "name": "itsound-website",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^6.0.3",
+    "@astrojs/sitemap": "^3.7.3",
+    "@studio-freight/lenis": "^1.0.42",
+    "@tailwindcss/vite": "^4.3.0",
+    "astro": "^6.4.5",
+    "gsap": "^3.15.0",
+    "lenis": "^1.3.23",
+    "tailwindcss": "^4.3.0",
+    "three": "^0.184.0"
+  }
+}

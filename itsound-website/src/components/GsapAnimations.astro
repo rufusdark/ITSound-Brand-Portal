@@ -1,0 +1,85 @@
+<script>
+document.addEventListener('astro:page-load', () => {
+  const GSAP_TIMEOUT = setTimeout(() => {
+    // Safety: if GSAP takes too long, force-show everything
+    document.querySelectorAll('.section-reveal').forEach(el => el.style.opacity = '1');
+  }, 3000);
+
+  Promise.all([
+    import('gsap'),
+    import('gsap/ScrollTrigger')
+  ]).then(([gsapModule, scrollTriggerModule]) => {
+    clearTimeout(GSAP_TIMEOUT);
+    const gsap = gsapModule.default;
+    const ScrollTrigger = scrollTriggerModule.ScrollTrigger || scrollTriggerModule.default;
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Kill any existing ScrollTriggers to prevent doubles
+    ScrollTrigger.getAll().forEach(st => st.kill());
+
+    // ─── Hero entrance stagger (fromTo con target esplicito) ───
+    if (document.querySelector('.hero-badge')) {
+      const heroTimeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      heroTimeline
+        .fromTo('.hero-badge',     { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, 0.2)
+        .fromTo('.hero-title-line1', { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, 0.4)
+        .fromTo('.hero-title-line2', { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, 0.5)
+        .fromTo('.hero-subtitle',  { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, 0.7)
+        .fromTo('.hero-actions > *', { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, stagger: 0.15 }, 0.9)
+        .fromTo('.hero-stats > *',  { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, stagger: 0.1 }, 1.1)
+        .fromTo('.scroll-indicator', { opacity: 0 }, { opacity: 1, duration: 0.6 }, 1.4);
+    }
+
+    // ─── Section reveals with GSAP ScrollTrigger (fromTo) ───
+    gsap.utils.toArray('.section-reveal').forEach((el) => {
+      gsap.fromTo(el,
+        { y: 80, opacity: 0 },
+        {
+          scrollTrigger: { trigger: el, start: 'top 80%', toggleActions: 'play none none none' },
+          y: 0, opacity: 1, duration: 1.2, ease: 'power3.out',
+        }
+      );
+    });
+
+    // ─── Stagger children with GSAP (fromTo) ───
+    gsap.utils.toArray('.stagger-gsap').forEach((parent) => {
+      gsap.fromTo(parent.children,
+        { y: 50, opacity: 0 },
+        {
+          scrollTrigger: { trigger: parent, start: 'top 80%', toggleActions: 'play none none none' },
+          y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power3.out',
+        }
+      );
+    });
+
+    // ─── Number counters ───
+    gsap.utils.toArray('.counter').forEach((el) => {
+      const target = parseInt(el.dataset.target) || 0;
+      const suffix = el.dataset.suffix || '';
+      gsap.from(el, {
+        scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none none' },
+        textContent: 0, duration: 2, ease: 'power2.out',
+        snap: { textContent: 1 },
+        onUpdate: function () {
+          el.textContent = Math.round(this.targets()[0].textContent) + suffix;
+        },
+      });
+    });
+
+    // ─── Parallax sections ───
+    gsap.utils.toArray('.parallax-bg').forEach((el) => {
+      gsap.to(el, {
+        scrollTrigger: {
+          trigger: el.parentElement, start: 'top bottom', end: 'bottom top', scrub: 1,
+        },
+        y: -30, ease: 'none',
+      });
+    });
+  }).catch(err => {
+    clearTimeout(GSAP_TIMEOUT);
+    console.warn('GSAP failed to load:', err);
+    // Fallback: show everything if GSAP fails
+    document.querySelectorAll('.section-reveal').forEach(el => el.style.opacity = '1');
+  });
+});
+</script>

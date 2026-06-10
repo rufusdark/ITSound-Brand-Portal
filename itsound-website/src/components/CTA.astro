@@ -1,0 +1,24 @@
+---
+interface Props {
+  label: string;
+  title: string;
+  highlight: string;
+  subtitle: string;
+  ctaText: string;
+  ctaHref: string;
+}
+const { label, title, highlight, subtitle, ctaText, ctaHref } = Astro.props;
+---
+
+<section class="py-20 text-center" style="background: #0A0A0A;">
+  <div class="container-custom reveal">
+    <div class="section-label">{label}</div>
+    <h2 class="section-title">{title} <span class="gradient-text">{highlight}</span></h2>
+    <p class="section-sub mx-auto mt-4 mb-8">
+      {subtitle}
+    </p>
+    <a href={ctaHref} class="btn btn-primary">
+      {ctaText} <i class="fas fa-arrow-right"></i>
+    </a>
+  </div>
+</section>

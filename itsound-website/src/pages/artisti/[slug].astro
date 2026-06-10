@@ -1,0 +1,175 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const artistEntries = await getCollection('artist');
+  return artistEntries.map((entry) => ({
+    params: { slug: entry.id.replace(/\.(mdx|md)$/, '') },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const artist = entry.data;
+const { Content } = await render(entry);
+---
+
+<Layout title={artist.name}>
+  <section class="py-24 relative overflow-hidden" style="background: #0A0A0A;">
+    <div class="absolute inset-0 opacity-5">
+      <div class="absolute inset-0" style="background-image: linear-gradient(rgba(139,92,246,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.05) 1px, transparent 1px); background-size: 60px 60px;"></div>
+    </div>
+    <div class="container-custom">
+      <a href="/artisti" class="inline-flex items-center gap-2 text-gray-light hover:text-accent transition-colors mb-8 text-sm">
+        <i class="fas fa-arrow-left"></i> Torna agli Artisti
+      </a>
+
+      <div class="flex flex-col md:flex-row items-start gap-10">
+        <div class="artist-avatar flex-shrink-0">
+          <span class="text-4xl font-display font-bold">{artist.name.charAt(0)}</span>
+        </div>
+        <div class="flex-1">
+          <div class="hero-badge">
+            <span class="pulse-dot"></span>
+            {artist.role}
+          </div>
+          <h1 class="text-3xl md:text-5xl font-display font-bold mb-3">{artist.name}</h1>
+          <p class="text-lg text-accent font-medium mb-4">{artist.genre}</p>
+
+          {artist.releases.length > 0 && (
+            <div class="mb-6">
+              <p class="text-xs text-gray font-display uppercase tracking-wider mb-2">Release</p>
+              <div class="flex flex-wrap gap-2">
+                {artist.releases.map((r) => (
+                  <span class="release-chip">{r}</span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div class="social-links flex gap-3">
+            {artist.spotify && (
+              <a href={artist.spotify} target="_blank" class="social-icon" aria-label="Spotify">
+                <i class="fab fa-spotify"></i>
+              </a>
+            )}
+            {artist.soundcloud && (
+              <a href={artist.soundcloud} target="_blank" class="social-icon" aria-label="SoundCloud">
+                <i class="fab fa-soundcloud"></i>
+              </a>
+            )}
+            {artist.instagram && (
+              <a href={artist.instagram} target="_blank" class="social-icon" aria-label="Instagram">
+                <i class="fab fa-instagram"></i>
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16" style="background: #141414;">
+    <div class="container-custom max-w-3xl prose prose-invert prose-purple">
+      <Content />
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-20 text-center" style="background: #0A0A0A;">
+    <div class="container-custom reveal">
+      <div class="section-label">/ Collabora con Noi</div>
+      <h2 class="section-title">Vuoi lavorare con <span class="gradient-text">{artist.name}</span>?</h2>
+      <p class="section-sub mx-auto mt-4 mb-8">
+        Contattaci per collaborazioni, booking o progetti speciali.
+      </p>
+      <a href="/contatti" class="btn btn-primary">
+        Contattaci <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+  </section>
+
+  <style is:inline>
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(139,92,246,0.1);
+      border: 1px solid rgba(139,92,246,0.2);
+      padding: 7px 16px;
+      border-radius: 50px;
+      font-size: 0.7rem; color: #A78BFA;
+      font-weight: 500; letter-spacing: 0.3px;
+      margin-bottom: 16px; backdrop-filter: blur(10px);
+    }
+    .hero-badge .pulse-dot {
+      width: 6px; height: 6px;
+      background: #06D6A0;
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .artist-avatar {
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+      display: flex; align-items: center; justify-content: center;
+      color: white;
+    }
+    .release-chip {
+      font-size: 0.7rem;
+      padding: 4px 10px;
+      background: rgba(139,92,246,0.1);
+      color: #A78BFA;
+      border-radius: 50px;
+    }
+    .social-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.04);
+      display: flex; align-items: center; justify-content: center;
+      color: #6B7280;
+      font-size: 1.1rem;
+      transition: all 0.25s ease;
+    }
+    .social-icon:hover {
+      background: #8B5CF6;
+      color: white;
+    }
+    .prose h2 {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.4rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      color: white;
+    }
+    .prose h3 {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.1rem;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+      color: white;
+    }
+    .prose p {
+      color: #9CA3AF;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    .prose ul {
+      color: #9CA3AF;
+      line-height: 1.8;
+      padding-left: 1.5rem;
+    }
+    .prose li {
+      margin-bottom: 0.5rem;
+    }
+    .prose a {
+      color: #8B5CF6;
+      text-decoration: none;
+    }
+    .prose a:hover {
+      text-decoration: underline;
+    }
+    .prose strong {
+      color: white;
+    }
+  </style>
+</Layout>

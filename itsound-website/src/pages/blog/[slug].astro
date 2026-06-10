@@ -1,0 +1,101 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const blogEntries = await getCollection('blog');
+  return blogEntries.map((entry) => ({
+    params: { slug: entry.id.replace(/\.(mdx|md)$/, '') },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<Layout title={entry.data.title}>
+  <article class="py-24 relative overflow-hidden" style="background: #0A0A0A;">
+    <div class="container-custom">
+      <a href="/blog" class="inline-flex items-center gap-2 text-gray-light hover:text-accent transition-colors mb-8 text-sm">
+        <i class="fas fa-arrow-left"></i> Torna al Blog
+      </a>
+      <div class="max-w-3xl mx-auto">
+        <div class="hero-badge">
+          <span class="pulse-dot"></span>
+          {entry.data.category}
+        </div>
+        <p class="text-sm text-gray mb-4">{entry.data.date}</p>
+        <h1 class="text-3xl md:text-4xl font-display font-bold leading-tight mb-6">
+          {entry.data.title}
+        </h1>
+        <p class="text-lg text-gray-light leading-relaxed">
+          {entry.data.excerpt}
+        </p>
+      </div>
+    </div>
+  </article>
+
+  <section class="py-16" style="background: #141414;">
+    <div class="container-custom max-w-3xl prose prose-invert prose-purple">
+      <Content />
+    </div>
+  </section>
+
+  <style is:inline>
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(139,92,246,0.1);
+      border: 1px solid rgba(139,92,246,0.2);
+      padding: 7px 16px;
+      border-radius: 50px;
+      font-size: 0.7rem; color: #A78BFA;
+      font-weight: 500; letter-spacing: 0.3px;
+      margin-bottom: 28px; backdrop-filter: blur(10px);
+    }
+    .hero-badge .pulse-dot {
+      width: 6px; height: 6px;
+      background: #06D6A0;
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .prose h2 {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.4rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      color: white;
+    }
+    .prose h3 {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.1rem;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+      color: white;
+    }
+    .prose p {
+      color: #9CA3AF;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    .prose ul {
+      color: #9CA3AF;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+    }
+    .prose li {
+      margin-bottom: 0.5rem;
+    }
+    .prose a {
+      color: #8B5CF6;
+      text-decoration: none;
+    }
+    .prose a:hover {
+      text-decoration: underline;
+    }
+    .prose strong {
+      color: white;
+    }
+  </style>
+</Layout>
