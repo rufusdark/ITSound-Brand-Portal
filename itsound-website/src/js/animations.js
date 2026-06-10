@@ -78,6 +78,17 @@ export function initAnimations() {
       ease: 'power3.out',
     }, 1.0);
 
+  // Hero meta / social proof: fade up
+  heroTL
+    .fromTo('.hero-meta', {
+      opacity: 0,
+      y: 20,
+    }, {
+      opacity: 1,
+      y: 0,
+      duration: 0.7,
+    }, 1.3);
+
   // Scroll indicator: fade in last
   heroTL
     .fromTo('.scroll-indicator', {
