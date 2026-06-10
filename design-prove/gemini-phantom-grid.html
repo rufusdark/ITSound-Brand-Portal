@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITSOUND.IT - Nuovo Sito In Arrivo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* Basic reset and canvas styling */
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #0A0A0A; /* BLACK */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+            font-family: 'Inter', sans-serif; /* Default for body text if not specified */
+        }
+        canvas {
+            display: block;
+            border: 2px solid #DC2626; /* RED border for contrast */
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); /* PURPLE glow */
+        }
+        button {
+            margin-top: 25px;
+            padding: 12px 25px;
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            background-color: #8B5CF6; /* PURPLE */
+            color: #FFFFFF;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(139, 92, 246, 0.4);
+        }
+        button:hover {
+            background-color: #A78BFA; /* Lighter purple */
+            transform: translateY(-2px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="designCanvas"></canvas>
+    <button id="downloadBtn">Scarica PNG</button>
+
+    <script>
+        const canvas = document.getElementById('designCanvas');
+        const ctx = canvas.getContext('2d');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        const canvasWidth = 1080;
+        const canvasHeight = 1080;
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+
+        const colors = {
+            RED: '#DC2626',
+            PURPLE: '#8B5CF6',
+            BLACK: '#0A0A0A',
+            WHITE: '#FFFFFF'
+        };
+
+        const imageUrl = 'Frame-21.png'; // Path relative to index.html
+
+        let backgroundImage = null;
+
+        // Function to load image
+        function loadImage(url) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = () => reject(new Error(`Failed to load image: \${url}`));
+                img.src = url;
+            });
+        }
+
+        // Function to apply duotone effect (maps luminance to two colors)
+        function applyDuotone(img, color1Hex, color2Hex) {
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCanvas.width = img.width;
+            tempCanvas.height = img.height;
+            tempCtx.drawImage(img, 0, 0);
+
+            const hexToRgba = (hex) => {
+                if (hex.startsWith('#')) hex = hex.slice(1);
+                if (hex.length === 3) hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+                const bigint = parseInt(hex, 16);
+                const r = (bigint >> 16) & 255;
+                const g = (bigint >> 8) & 255;
+                const b = bigint & 255;
+                return [r, g, b];
+            };
+
+            const color1Rgb = hexToRgba(color1Hex); // Lighter color (RED)
+            const color2Rgb = hexToRgba(color2Hex); // Darker color (BLACK)
+
+            const imageData = tempCtx.getImageData(0, 0, img.width, img.height);
+            const data = imageData.data;
+
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i+1];
+                const b = data[i+2];
+                
+                // Calculate luminance (perceived brightness)
+                const gray = 0.2126 * r + 0.7152 * g + 0.0722 * b; // Standard luminance calculation
+                const t = gray / 255; // Normalize to 0-1
+
+                // Interpolate between color1 (RED) and color2 (BLACK) based on luminance
+                // Darker pixels (lower t) lean towards BLACK, lighter pixels (higher t) lean towards RED
+                data[i] = color2Rgb[0] * (1 - t) + color1Rgb[0] * t;     // Red channel
+                data[i+1] = color2Rgb[1] * (1 - t) + color1Rgb[1] * t;   // Green channel
+                data[i+2] = color2Rgb[2] * (1 - t) + color1Rgb[2] * t;   // Blue channel
+                // Alpha channel remains unchanged
+            }
+            tempCtx.putImageData(imageData, 0, 0);
+            return tempCanvas;
+        }
+
+        // Function to draw subtle noise/grain texture
+        function drawNoise(context, width, height, color1Rgb, color2Rgb, alphaMax) {
+            const imageData = context.createImageData(width, height);
+            const data = imageData.data;
+
+            for (let i = 0; i < data.length; i += 4) {
+                // Generate random color within the range of color1 and color2
+                const t = Math.random(); // Random factor between 0 and 1
+                const r = Math.floor(color1Rgb[0] * (1 - t) + color2Rgb[0] * t);
+                const g = Math.floor(color1Rgb[1] * (1 - t) + color2Rgb[1] * t);
+                const b = Math.floor(color1Rgb[2] * (1 - t) + color2Rgb[2] * t);
+
+                data[i] = r; // Red
+                data[i+1] = g; // Green
+                data[i+2] = b; // Blue
+                data[i+3] = Math.random() * alphaMax * 255; // Alpha for subtlety (controlled opacity)
+            }
+            context.putImageData(imageData, 0, 0);
+        }
+
+        // Function to draw the phantom grid and diagonal composition lines
+        function drawGrid(context, width, height, alpha, color) {
+            context.save();
+            context.strokeStyle = color;
+            context.globalAlpha = alpha; // Base alpha for the grid
+
+            // Level 1: Subtle Rectangular Grid
+            const level1Spacing = width / 5; // Slightly denser than a basic 3-level grid
+            context.lineWidth = 1;
+            context.setLineDash([]); // Solid lines for main grid
+            for (let i = 1; i < 5; i++) {
+                // Vertical lines
+                context.beginPath();
+                context.moveTo(i * level1Spacing, 0);
+                context.lineTo(i * level1Spacing, height);
+                context.stroke();
+
+                // Horizontal lines
+                context.beginPath();
+                context.moveTo(0, i * level1Spacing);
+                context.lineTo(width, i * level1Spacing);
+                context.stroke();
+            }
+
+            // Level 2: Primary Diagonals
+            context.lineWidth = 1.5;
+            context.setLineDash([15, 15]); // Dashed lines for subtlety
+            context.globalAlpha = alpha * 0.7; // Slightly more visible than main grid
+            
+            // Primary diagonals
+            context.beginPath();
+            context.moveTo(0, 0);
+            context.lineTo(width, height);
+            context.stroke();
+
+            context.beginPath();
+            context.moveTo(width, 0);
+            context.lineTo(0, height);
+            context.stroke();
+            
+            // Level 3: Secondary Diagonals and lines for "phantom" feel
+            context.lineWidth = 1;
+            context.setLineDash([8, 8]); // Finer dash
+            context.globalAlpha = alpha * 0.5; // Even more subtle
+            const level3Spacing = width / 8; // More lines for "3-level" complexity
+            for (let i = 1; i < 8; i++) { 
+                context.beginPath();
+                context.moveTo(i * level3Spacing, 0);
+                context.lineTo(width, i * level3Spacing);
+                context.stroke();
+
+                context.beginPath();
+                context.moveTo(0, i * level3Spacing);
+                context.lineTo(width - i * level3Spacing, height);
+                context.stroke();
+            }
+            context.restore();
+        }
+
+        // Function to draw decorative frequency bars
+        function drawFrequencyBars(context, width, height, barBaseColorRgb, barAccentColorRgb, numBars) {
+            context.save();
+            context.globalAlpha = 0.8;
+
+            const barWidth = width / (numBars * 2); // Bars are half the spacing
+            const spacing = width / numBars;
+            
+            for (let i = 0; i < numBars; i++) {
+                // Random height between 10% and 70% of canvas height
+                const barHeight = Math.random() * (height * 0.6) + (height * 0.1); 
+                const x = i * spacing + barWidth / 2; // Position bars with spacing
+                const y = height - barHeight;
+
+                // Draw base bar
+                context.fillStyle = `rgb(\${barBaseColorRgb.join(',')})`;
+                context.fillRect(x, y, barWidth, barHeight);
+
+                // Add a subtle accent highlight on top
+                context.fillStyle = `rgba(\${barAccentColorRgb.join(',')}, 0.7)`;
+                context.beginPath();
+                context.moveTo(x, y);
+                context.lineTo(x + barWidth, y);
+                context.lineTo(x + barWidth, y - 5); // Small upward extension
+                context.lineTo(x, y - 5);
+                context.closePath();
+                context.fill();
+            }
+            context.restore();
+        }
+
+        // Function to draw text elements
+        function drawText(context, text, font, color, x, y, alignment = 'center', baseline = 'middle') {
+            context.save();
+            context.font = font;
+            context.fillStyle = color;
+            context.textAlign = alignment;
+            context.textBaseline = baseline;
+            context.fillText(text, x, y);
+            context.restore();
+        }
+
+        // Function to create download button functionality
+        function setupDownloadButton(canvas, button) {
+            button.addEventListener('click', () => {
+                const dataURL = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.href = dataURL;
+                link.download = 'itsound-design.png';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        }
+
+        // Main drawing function
+        async function drawDesign() {
+            try {
+                // 1. Load background image
+                backgroundImage = await loadImage(imageUrl);
+
+                // Apply duotone effect (RED for lighter tones, BLACK for darker tones)
+                const duotoneCanvas = applyDuotone(backgroundImage, colors.RED, colors.BLACK);
+
+                // Draw duotone background, scaled to fit canvas
+                ctx.drawImage(duotoneCanvas, 0, 0, canvasWidth, canvasHeight);
+
+                // 2. Draw subtle grid and diagonals for composition
+                drawGrid(ctx, canvasWidth, canvasHeight, 0.1, colors.WHITE); // 10% opacity white grid
+
+                // 3. Draw noise/grain texture
+                const hexToRgb = (hex) => {
+                    if (hex.startsWith('#')) hex = hex.slice(1);
+                    if (hex.length === 3) hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+                    const bigint = parseInt(hex, 16);
+                    return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
+                };
+                drawNoise(ctx, canvasWidth, canvasHeight, hexToRgb(colors.BLACK), hexToRgb(colors.WHITE), 0.2); // Noise between black and white, max 20% opacity
+
+                // 4. Draw frequency bars (decorative element)
+                const barBaseColorRgb = hexToRgb(colors.PURPLE);
+                const barAccentColorRgb = hexToRgb(colors.WHITE);
+                drawFrequencyBars(ctx, canvasWidth, canvasHeight, barBaseColorRgb, barAccentColorRgb, 25); // 25 bars
+
+                // 5. Draw text elements
+                const orbitronFont = `700 65px 'Orbitron', sans-serif`; // Slightly larger title
+                const interRegularFont = `400 24px 'Inter', sans-serif`; // Slightly larger body text
+                const interBoldFont = `700 32px 'Inter', sans-serif`; // Slightly larger bold text
+                const interSmallBoldFont = `700 22px 'Inter', sans-serif`; // For footer
+
+                // Main Title: "NUOVO SITO IN ARRIVO" - Diagonal composition
+                ctx.save();
+                ctx.translate(canvasWidth * 0.5, canvasHeight * 0.28); // Adjusted Y for better placement
+                ctx.rotate(-Math.PI / 45); // Smaller rotation (-4 degrees) for subtle diagonal feel
+                drawText(ctx, "NUOVO SITO IN ARRIVO", orbitronFont, colors.WHITE, 0, 0, 'center', 'middle');
+                ctx.restore();
+                
+                // Subtitle: "WORK IN PROGRESS"
+                drawText(ctx, "WORK IN PROGRESS", `700 48px 'Inter', sans-serif`, colors.PURPLE, canvasWidth / 2, canvasHeight * 0.45, 'center', 'middle');
+
+                // Constraint text: "Nessun software proprietario. Solo tecnologia open e libera."
+                drawText(ctx, "Nessun software proprietario. Solo tecnologia open e libera.", interRegularFont, colors.WHITE, canvasWidth / 2, canvasHeight * 0.60, 'center', 'middle');
+
+                // Footer text: "@ ITSOUND.IT" + "musica · eventi · cultura"
+                const footerY = canvasHeight * 0.92;
+                drawText(ctx, "@ ITSOUND.IT", interBoldFont, colors.PURPLE, canvasWidth * 0.15, footerY, 'left', 'middle'); // Left aligned
+                drawText(ctx, "musica · eventi · cultura", interSmallBoldFont, colors.WHITE, canvasWidth * 0.85, footerY, 'right', 'middle'); // Right aligned
+
+                // 6. Setup download button
+                setupDownloadButton(canvas, downloadBtn);
+
+            } catch (error) {
+                console.error("Error drawing design:", error);
+                // Display error message on canvas if loading/drawing fails
+                ctx.fillStyle = 'red';
+                ctx.font = "30px 'Inter', sans-serif";
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText("Errore nel caricamento o disegno dell'immagine.", canvasWidth / 2, canvasHeight / 2);
+            }
+        }
+
+        // Ensure fonts and image are loaded before drawing
+        window.onload = drawDesign;
+
+    </script>
+</body>
+</html>

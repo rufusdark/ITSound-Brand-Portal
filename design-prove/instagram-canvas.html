@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #222; }
+  canvas { border: 1px solid #444; }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+<canvas id="c" width="1080" height="1080"></canvas>
+<script>
+const c = document.getElementById('c');
+const ctx = c.getContext('2d');
+const W = 1080, H = 1080;
+
+// Brand colors
+const RED = '#DC2626';
+const PURPLE = '#8B5CF6';
+const BLACK = '#0A0A0A';
+const WHITE = '#FFFFFF';
+
+function drawBackground() {
+  // Dark base
+  const bg = ctx.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, '#0A0A0A');
+  bg.addColorStop(0.4, '#1a0a2e');
+  bg.addColorStop(0.7, '#2d0a3a');
+  bg.addColorStop(1, '#0A0A0A');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // Red glow - top right
+  const rg = ctx.createRadialGradient(W, 0, 0, W, 0, 500);
+  rg.addColorStop(0, 'rgba(220, 38, 38, 0.25)');
+  rg.addColorStop(0.5, 'rgba(220, 38, 38, 0.08)');
+  rg.addColorStop(1, 'rgba(220, 38, 38, 0)');
+  ctx.fillStyle = rg;
+  ctx.fillRect(0, 0, W, H);
+
+  // Purple glow - bottom left
+  const pg = ctx.createRadialGradient(0, H, 0, 0, H, 450);
+  pg.addColorStop(0, 'rgba(139, 92, 246, 0.2)');
+  pg.addColorStop(0.5, 'rgba(139, 92, 246, 0.06)');
+  pg.addColorStop(1, 'rgba(139, 92, 246, 0)');
+  ctx.fillStyle = pg;
+  ctx.fillRect(0, 0, W, H);
+}
+
+function drawGrid() {
+  ctx.strokeStyle = 'rgba(139, 92, 246, 0.08)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < W; x += 60) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+  }
+  for (let y = 0; y < H; y += 60) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+}
+
+function drawGeometricElements() {
+  // Horizontal accent lines
+  ctx.strokeStyle = RED;
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(80, 200); ctx.lineTo(280, 200); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(80, 204); ctx.lineTo(200, 204); ctx.stroke();
+
+  // Vertical accent bar - left
+  const vg = ctx.createLinearGradient(0, 200, 0, 500);
+  vg.addColorStop(0, PURPLE);
+  vg.addColorStop(1, 'transparent');
+  ctx.fillStyle = vg;
+  ctx.fillRect(80, 200, 3, 300);
+
+  // Circle element - top right
+  ctx.strokeStyle = 'rgba(139, 92, 246, 0.15)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.arc(920, 180, 120, 0, Math.PI * 2); ctx.stroke();
+  ctx.beginPath(); ctx.arc(920, 180, 100, 0, Math.PI * 2); ctx.stroke();
+
+  // Small decorative circles
+  ctx.fillStyle = 'rgba(220, 38, 38, 0.3)';
+  ctx.beginPath(); ctx.arc(850, 160, 6, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(870, 150, 4, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(990, 190, 5, 0, Math.PI * 2); ctx.fill();
+
+  // Sound wave visualization (abstract)
+  ctx.strokeStyle = 'rgba(139, 92, 246, 0.12)';
+  ctx.lineWidth = 2;
+  for (let i = 0; i < 5; i++) {
+    const baseY = 810 + i * 20;
+    ctx.beginPath();
+    ctx.moveTo(100, baseY);
+    for (let x = 100; x < 980; x += 10) {
+      const wave = Math.sin(x * 0.03 + i * 1.2) * 8;
+      ctx.lineTo(x, baseY + wave);
+    }
+    ctx.stroke();
+  }
+}
+
+function drawTitle() {
+  ctx.save();
+
+  // "NUOVO SITO" - large, with glow
+  ctx.shadowColor = 'rgba(220, 38, 38, 0.5)';
+  ctx.shadowBlur = 30;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 0;
+
+  ctx.font = '700 58px Orbitron, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = WHITE;
+  ctx.fillText('NUOVO SITO', W/2, 340);
+
+  // "IN ARRIVO" with red glow
+  ctx.shadowColor = 'rgba(220, 38, 38, 0.7)';
+  ctx.shadowBlur = 40;
+  ctx.font = '900 72px Orbitron, sans-serif';
+  ctx.fillStyle = RED;
+  ctx.fillText('IN ARRIVO', W/2, 425);
+
+  ctx.shadowBlur = 0;
+  ctx.shadowColor = 'transparent';
+
+  // "WORK IN PROGRESS" subtitle
+  ctx.font = '400 24px Orbitron, sans-serif';
+  ctx.fillStyle = PURPLE;
+  ctx.fillText('WORK IN PROGRESS', W/2, 500);
+
+  // Separator line below title
+  ctx.strokeStyle = 'rgba(139, 92, 246, 0.3)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(440, 530); ctx.lineTo(640, 530); ctx.stroke();
+
+  ctx.restore();
+}
+
+function drawBodyText() {
+  ctx.save();
+  ctx.font = '300 18px Inter, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+  ctx.fillText('Nessun software proprietario.', W/2, 580);
+  ctx.fillText('Solo tecnologia open e libera.', W/2, 608);
+  ctx.restore();
+}
+
+function drawFooter() {
+  ctx.save();
+
+  // Bottom accent bar
+  const bg = ctx.createLinearGradient(W/2 - 200, 0, W/2 + 200, 0);
+  bg.addColorStop(0, 'transparent');
+  bg.addColorStop(0.3, PURPLE);
+  bg.addColorStop(0.7, PURPLE);
+  bg.addColorStop(1, 'transparent');
+  ctx.fillStyle = bg;
+  ctx.fillRect(W/2 - 200, 940, 400, 2);
+
+  // ITSOUND.IT at bottom
+  ctx.font = '700 22px Orbitron, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = RED;
+  ctx.fillText('@ ITSOUND.IT', W/2, 975);
+
+  // Tagline
+  ctx.font = '300 12px Inter, sans-serif';
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+  ctx.fillText('musica · eventi · cultura', W/2, 1005);
+
+  ctx.restore();
+}
+
+function drawCornerAccents() {
+  ctx.save();
+
+  // Top-left corner bracket
+  ctx.strokeStyle = 'rgba(139, 92, 246, 0.4)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(40, 70); ctx.lineTo(40, 40); ctx.lineTo(70, 40);
+  ctx.stroke();
+
+  // Bottom-right corner bracket
+  ctx.beginPath();
+  ctx.moveTo(1040, 1010); ctx.lineTo(1040, 1040); ctx.lineTo(1010, 1040);
+  ctx.stroke();
+
+  // Small red dot
+  ctx.fillStyle = RED;
+  ctx.beginPath(); ctx.arc(70, 70, 4, 0, Math.PI * 2); ctx.fill();
+
+  ctx.restore();
+}
+
+// ====== RENDER ALL ======
+drawBackground();
+drawGrid();
+drawGeometricElements();
+drawCornerAccents();
+drawTitle();
+drawBodyText();
+drawFooter();
+
+// Auto-export after fonts are loaded
+document.fonts.ready.then(() => {
+  // Re-render after fonts loaded
+  drawBackground();
+  drawGrid();
+  drawGeometricElements();
+  drawCornerAccents();
+  drawTitle();
+  drawBodyText();
+  drawFooter();
+
+  // Mark as done
+  c.setAttribute('data-rendered', 'true');
+});
+</script>
+</body>
+</html>
