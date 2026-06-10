@@ -212,6 +212,15 @@
   display: flex; gap: 16px; flex-wrap: wrap;
 }
 
+/* Hero Waveform Animation (subtle) */
+.hero-waveform {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
 /* Decorative Elements (Frame 21 style) */
 .hero-corner-tl {
   position: absolute; top: 40px; left: 40px;
@@ -697,6 +706,166 @@
   body, a, button { cursor: auto !important; }
 }
 
+/* ─── ITSOUND CUSTOM PLAYER ─── */
+.its-player {
+  position: absolute;
+  bottom: 100px; right: 40px;
+  z-index: 10;
+  width: 340px;
+  background: rgba(10,10,10,0.75);
+  backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid rgba(139,92,246,0.12);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+  transition: transform 0.4s var(--ease-smooth), box-shadow 0.4s var(--ease-smooth);
+}
+.its-player:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 32px 100px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06);
+  border-color: rgba(139,92,246,0.2);
+}
+
+.its-player-inner {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.its-player-art {
+  position: relative;
+  width: 72px; height: 72px;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.its-player-art img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.its-player-art-overlay {
+  position: absolute; inset: 0;
+  background: rgba(10,10,10,0.3);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.its-player-art:hover .its-player-art-overlay { opacity: 1; }
+.its-player-art-overlay i { color: rgba(255,255,255,0.6); font-size: 1rem; }
+
+.its-player-info {
+  flex: 1;
+  min-width: 0;
+}
+.its-player-label {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.55rem;
+  font-weight: 500;
+  color: var(--purple-light);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.its-player-title {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.its-player-artist {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  display: block;
+  margin-bottom: 10px;
+}
+
+.its-player-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.its-player-btn {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+  color: white;
+  border: none;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-smooth);
+  flex-shrink: 0;
+}
+.its-player-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 20px rgba(139,92,246,0.4);
+}
+.its-player-btn.playing {
+  background: linear-gradient(135deg, #1DB954, #169c46);
+}
+
+.its-player-progress {
+  flex: 1;
+  min-width: 0;
+}
+.its-player-progress-bar {
+  width: 100%;
+  height: 3px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 3px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.its-player-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--purple), var(--purple-light));
+  border-radius: 3px;
+  transition: width 0.3s linear;
+}
+.its-player-time {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 0.6rem;
+  color: var(--text-tertiary);
+  font-family: monospace;
+}
+
+.its-player-extra {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.its-player-spotify-link {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: #1DB954;
+  font-size: 1rem;
+  transition: all 0.25s ease;
+}
+.its-player-spotify-link:hover {
+  background: rgba(29,185,84,0.1);
+  transform: scale(1.15);
+}
+
+.its-player-embed {
+  margin-top: 12px;
+  height: 0;
+  overflow: hidden;
+  transition: height 0.4s var(--ease-smooth);
+}
+.its-player-embed.open {
+  height: 80px;
+}
+
 /* ─── RESPONSIVE ─── */
 @media (max-width: 968px) {
   .about-grid { grid-template-columns: 1fr; gap: 48px; }
@@ -721,6 +890,12 @@
   .hamburger { display: flex; }
   .hero-subtitle br { display: none; }
   .hero-actions .btn { width: 100%; }
+  .its-player {
+    position: relative;
+    bottom: auto; right: auto;
+    width: 100%;
+    margin-top: 24px;
+  }
   .footer-grid { grid-template-columns: 1fr; }
   .territory-cards { grid-template-columns: 1fr; }
 }
