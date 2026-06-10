@@ -1,9 +1,10 @@
 /**
- * ITSound EQ Visualizer — Canvas 2D
- * Full-height EQ-style waveform with neon glow
- * Lightweight, no Three.js
+ * ITSound Aurora Fluid — Canvas 2D
+ * Organic fluid aurora bands with starfield
+ * Inspired by northern lights / nebula aesthetic
+ * Zero dependencies, pure Canvas 2D
  */
-let canvas, ctx, bars, animationId;
+let canvas, ctx, animationId, time;
 
 export function initHeroAnimation() {
   canvas = document.getElementById('heroWaveform');
@@ -12,27 +13,10 @@ export function initHeroAnimation() {
   if (!hero) return;
 
   ctx = canvas.getContext('2d');
+  time = 0;
+
   resize();
   window.addEventListener('resize', resize);
-
-  const BAR_COUNT = 80;
-  bars = [];
-  for (let i = 0; i < BAR_COUNT; i++) {
-    const t = i / BAR_COUNT;
-    // Logarithmic-ish distribution: more bars in low frequencies
-    const freq = Math.pow(t, 0.6);
-    // Random base amplitude per band
-    const base = 0.15 + Math.random() * 0.85;
-    bars.push({
-      target: base * (1 - Math.abs(freq - 0.5) * 0.3),
-      current: 0,
-      speed: 0.02 + Math.random() * 0.06,
-      phase: Math.random() * Math.PI * 2,
-      // Some bars "pulse" harder
-      energy: 0.3 + Math.random() * 0.7,
-    });
-  }
-
   animate();
 }
 
@@ -44,76 +28,195 @@ function resize() {
   canvas.height = hero.offsetHeight;
 }
 
+// ─── Palette ───
+// Deep purple → violet → cyan → dark
+const COLORS = [
+  { r: 139, g: 92,  b: 246 },  // purple
+  { r: 100, g: 60,  b: 200 },  // deep violet
+  { r: 60,  g: 120, b: 220 },  // blue-violet
+  { r: 30,  g: 160, b: 200 },  // teal
+  { r: 6,   g: 214, b: 160 },  // cyan
+];
+
+function lerpColor(a, b, t) {
+  return {
+    r: Math.round(a.r + (b.r - a.r) * t),
+    g: Math.round(a.g + (b.g - a.g) * t),
+    b: Math.round(a.b + (b.b - a.b) * t),
+  };
+}
+
+function getAuroraColor(t) {
+  const len = COLORS.length - 1;
+  const pos = t * len;
+  const idx = Math.min(Math.floor(pos), len - 1);
+  const frac = pos - idx;
+  return lerpColor(COLORS[idx], COLORS[idx + 1], frac);
+}
+
+// ─── Stars ───
+const STARS = [];
+function initStars(count) {
+  STARS.length = 0;
+  const w = canvas.width || 800;
+  const h = canvas.height || 600;
+  for (let i = 0; i < count; i++) {
+    STARS.push({
+      x: Math.random() * w * 1.2 - w * 0.1,
+      y: Math.random() * h * 0.6,          // top 60%
+      size: 0.5 + Math.random() * 1.8,
+      alpha: 0.1 + Math.random() * 0.5,
+      twinkleSpeed: 0.3 + Math.random() * 0.8,
+      twinklePhase: Math.random() * Math.PI * 2,
+    });
+  }
+}
+
+function drawStars(ctx, w, h) {
+  if (STARS.length === 0) initStars(60);
+  // Re-disperse if canvas grew
+  if (STARS.length > 0 && STARS[STARS.length-1].x > w * 1.5) {
+    initStars(60);
+  }
+
+  for (const star of STARS) {
+    const twinkle = Math.sin(time * star.twinkleSpeed + star.twinklePhase) * 0.3 + 0.7;
+    const alpha = star.alpha * twinkle;
+    
+    const rad = star.size * (0.8 + Math.sin(time * star.twinkleSpeed * 0.5 + star.twinklePhase) * 0.2);
+    
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, rad, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+    ctx.fill();
+  }
+}
+
+// ─── Aurora Bands ───
+function drawAurora(ctx, w, h) {
+  const BANDS = 5;
+  const POINTS = 120;
+
+  for (let b = 0; b < BANDS; b++) {
+    const bandOffset = b / BANDS;
+    const bandAlpha = 0.03 + bandOffset * 0.04;
+    const bandSpeed = 0.15 + bandOffset * 0.2;
+    const bandAmp = 0.06 + bandOffset * 0.04;
+
+    // Build the band path
+    ctx.beginPath();
+    ctx.moveTo(-20, h);
+
+    for (let i = 0; i <= POINTS; i++) {
+      const t = i / POINTS;
+      const x = t * (w + 40) - 20;
+      
+      // Multiple sine waves for organic motion
+      const wave1 = Math.sin(t * Math.PI * 4 + time * bandSpeed * 0.7) * bandAmp;
+      const wave2 = Math.sin(t * Math.PI * 8 + time * bandSpeed * 1.1 + 1.3) * bandAmp * 0.5;
+      const wave3 = Math.sin(t * Math.PI * 1.5 + time * bandSpeed * 0.3 + 2.7) * bandAmp * 0.3;
+      
+      // Base y: arcs from bottom-center upward
+      const baseY = h * (0.85 - Math.sin(t * Math.PI) * 0.35 - bandOffset * 0.15);
+      const y = baseY + (wave1 + wave2 + wave3) * h;
+
+      ctx.lineTo(x, y);
+    }
+
+    ctx.lineTo(w + 20, h);
+    ctx.closePath();
+
+    // Gradient fill for this band
+    const grad = ctx.createLinearGradient(0, h * 0.3, 0, h);
+    const c1 = getAuroraColor(bandOffset * 0.6 + 0.1);
+    const c2 = getAuroraColor(bandOffset * 0.6 + 0.3);
+    const c3 = getAuroraColor(bandOffset * 0.6 + 0.6);
+
+    grad.addColorStop(0, `rgba(${c1.r}, ${c1.g}, ${c1.b}, ${bandAlpha * 0.1})`);
+    grad.addColorStop(0.4, `rgba(${c2.r}, ${c2.g}, ${c2.b}, ${bandAlpha * 0.6})`);
+    grad.addColorStop(0.7, `rgba(${c2.r}, ${c2.g}, ${c2.b}, ${bandAlpha * 0.3})`);
+    grad.addColorStop(1, `rgba(${c3.r}, ${c3.g}, ${c3.b}, 0)`);
+
+    ctx.fillStyle = grad;
+    ctx.fill();
+  }
+}
+
+// ─── Light Rays ───
+function drawLightRays(ctx, w, h) {
+  const RAY_COUNT = 4;
+  ctx.save();
+  
+  for (let i = 0; i < RAY_COUNT; i++) {
+    const t = (i / RAY_COUNT + time * 0.005) % 1;
+    const x = t * w;
+    const alpha = 0.008 + Math.sin(t * Math.PI) * 0.012;
+    
+    const grad = ctx.createLinearGradient(x, 0, x, h);
+    grad.addColorStop(0, `rgba(139, 92, 246, ${alpha * 0.3})`);
+    grad.addColorStop(0.3, `rgba(139, 92, 246, ${alpha})`);
+    grad.addColorStop(0.7, `rgba(6, 214, 160, ${alpha * 0.5})`);
+    grad.addColorStop(1, `rgba(6, 214, 160, 0)`);
+
+    ctx.fillStyle = grad;
+    ctx.fillRect(x - 40, 0, 80, h);
+  }
+  
+  ctx.restore();
+}
+
+// ─── Glow Nodes ───
+function drawGlowNodes(ctx, w, h) {
+  const NODES = 6;
+  const baseX = w * 0.3;
+  const baseY = h * 0.35;
+
+  for (let i = 0; i < NODES; i++) {
+    const t = i / NODES;
+    const angle = t * Math.PI * 2 + time * 0.08;
+    const radius = w * (0.15 + Math.sin(time * 0.1 + i) * 0.05);
+    
+    const x = baseX + Math.cos(angle) * radius;
+    const y = baseY + Math.sin(angle * 1.5 + time * 0.05) * radius * 0.4;
+    
+    const pulse = Math.sin(time * 0.5 + i * 1.2) * 0.3 + 0.7;
+    const r = 8 + pulse * 20;
+    
+    const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
+    const c = getAuroraColor(t * 0.8);
+    grad.addColorStop(0, `rgba(${c.r}, ${c.g}, ${c.b}, ${0.08 * pulse})`);
+    grad.addColorStop(0.5, `rgba(${c.r}, ${c.g}, ${c.b}, ${0.03 * pulse})`);
+    grad.addColorStop(1, `rgba(${c.r}, ${c.g}, ${c.b}, 0)`);
+    
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = grad;
+    ctx.fill();
+  }
+}
+
+// ─── Main Render Loop ───
 function animate() {
   animationId = requestAnimationFrame(animate);
   if (!ctx || !canvas) return;
 
   const w = canvas.width;
   const h = canvas.height;
+  time += 0.016; // ~60fps step
+
   ctx.clearRect(0, 0, w, h);
 
-  const time = Date.now() / 1000;
-  const BAR_COUNT = bars.length;
-  const barW = Math.max(2, Math.min(4, w / BAR_COUNT * 0.6));
-  const gap = Math.max(2, barW * 0.5);
-  const totalW = BAR_COUNT * (barW + gap);
-  const startX = (w - totalW) / 2;
+  // 1. Aurora bands (background)
+  drawAurora(ctx, w, h);
 
-  // Draw bars from bottom-up
-  for (let i = 0; i < BAR_COUNT; i++) {
-    const b = bars[i];
-    const freq = i / BAR_COUNT;
+  // 2. Light rays (mid layer)
+  drawLightRays(ctx, w, h);
 
-    // Multi-sine wave motion
-    const wave1 = Math.sin(time * b.speed * 1.2 + b.phase);
-    const wave2 = Math.sin(time * b.speed * 2.4 + b.phase * 1.7) * 0.3;
-    const wave3 = Math.sin(time * b.speed * 0.6 + b.phase * 0.5) * 0.15;
-    const motion = (wave1 + wave2 + wave3) / 1.45;
+  // 3. Stars (foreground)
+  drawStars(ctx, w, h);
 
-    // Smooth current toward target
-    b.current += (b.target * (0.5 + (motion + 1) * 0.25) - b.current) * 0.05;
-
-    const barHeight = Math.max(4, b.current * h * 0.55);
-    const x = startX + i * (barW + gap);
-    const y = h - barHeight - 2;
-
-    // --- Neon glow effect ---
-    // Layer 1: outer glow
-    ctx.shadowColor = 'rgba(139, 92, 246, 0.3)';
-    ctx.shadowBlur = 12;
-
-    // Layer 2: the bar itself with gradient
-    const alpha = 0.3 + b.current * 1.2;
-
-    // Color shifts from purple (low) → cyan (mid) → purple-light (high)
-    let r, g, bl;
-    if (freq < 0.3) {
-      // Low: deep purple → purple
-      const t = freq / 0.3;
-      r = 139; g = 92 + t * 54; bl = 246;
-    } else if (freq < 0.6) {
-      // Mid: purple → cyan
-      const t = (freq - 0.3) / 0.3;
-      r = 139 - t * 100; g = 146 + t * 20; bl = 246 - t * 100;
-    } else {
-      // High: cyan → purple-light
-      const t = (freq - 0.6) / 0.4;
-      r = 39 + t * 128; g = 166 - t * 62; bl = 146 + t * 20;
-    }
-
-    ctx.fillStyle = `rgba(${Math.round(r)}, ${Math.round(g)}, ${Math.round(bl)}, ${Math.min(1, alpha)})`;
-    ctx.fillRect(x, y, barW, barHeight);
-
-    // Layer 3: bright core (smaller, brighter)
-    ctx.shadowBlur = 0;
-    ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.15})`;
-    const coreW = Math.max(1, barW * 0.4);
-    const coreX = x + (barW - coreW) / 2;
-    ctx.fillRect(coreX, y + 2, coreW, Math.max(2, barHeight - 4));
-  }
-
-  // Reset shadow for next frame
-  ctx.shadowBlur = 0;
+  // 4. Glow nodes (accent)
+  drawGlowNodes(ctx, w, h);
 }
 
 export function destroyHeroAnimation() {
