@@ -9,9 +9,8 @@ export default defineConfig({
     assetsInlineLimit: 0,
     rollupOptions: {
       output: {
-        manualChunks: {
-          three: ['three'],
-          gsap: ['gsap', 'gsap/ScrollTrigger'],
+        manualChunks(id) {
+          if (id.includes('gsap')) return 'gsap';
         },
       },
     },
