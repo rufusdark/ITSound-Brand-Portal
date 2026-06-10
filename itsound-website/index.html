@@ -24,12 +24,43 @@
   <!-- Scroll progress bar -->
   <div class="scroll-progress" id="scrollProgress"></div>
 
-  <!-- Page loader -->
+  <!-- Cinematic Preloader -->
   <div class="page-loader" id="pageLoader">
+    <div class="loader-bg"></div>
     <div class="loader-content">
-      <div class="loader-ring"></div>
-      <div class="loader-text">ITSound</div>
+      <!-- Rotating ring with dashes -->
+      <div class="loader-ring-outer" id="loaderRing">
+        <svg class="loader-ring-svg" viewBox="0 0 120 120" width="120" height="120">
+          <circle class="loader-ring-track" cx="60" cy="60" r="54" fill="none" stroke="rgba(139,92,246,0.08)" stroke-width="1.5"/>
+          <circle class="loader-ring-progress" id="loaderRingProgress" cx="60" cy="60" r="54" fill="none" stroke="url(#loaderGrad)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="339.3" stroke-dashoffset="339.3" transform="rotate(-90 60 60)"/>
+          <defs>
+            <linearGradient id="loaderGrad" x1="0" y1="0" x2="120" y2="120">
+              <stop offset="0%" stop-color="#8B5CF6"/>
+              <stop offset="100%" stop-color="#A78BFA"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <!-- Inner spinning disc -->
+        <div class="loader-disc" id="loaderDisc">
+          <img src="/logo.png" alt="ITSound" class="loader-logo" />
+        </div>
+      </div>
+      <!-- Text reveal -->
+      <div class="loader-text-group">
+        <span class="loader-char" style="--i:0">I</span>
+        <span class="loader-char" style="--i:1">T</span>
+        <span class="loader-char" style="--i:2">S</span>
+        <span class="loader-char" style="--i:3">o</span>
+        <span class="loader-char" style="--i:4">u</span>
+        <span class="loader-char" style="--i:5">n</span>
+        <span class="loader-char" style="--i:6">d</span>
+      </div>
+      <div class="loader-subtitle">Record Label · Martina Franca</div>
     </div>
+    <div class="loader-progress-wrap">
+      <div class="loader-progress-bar" id="loaderProgressBar"></div>
+    </div>
+    <div class="loader-progress-pct" id="loaderProgressPct">0%</div>
   </div>
 
   <!-- Navigation Island -->
