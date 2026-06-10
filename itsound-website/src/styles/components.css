@@ -83,18 +83,16 @@
 /* Text reveal */
 .loader-text-group {
   display: flex;
-  gap: 2px;
-  font-family: var(--font-display);
-  font-size: clamp(1.4rem, 3vw, 2rem);
-  font-weight: 700;
-  letter-spacing: 6px;
-  color: white;
-  height: 1.2em;
-}
-.loader-char {
-  display: inline-block;
+  justify-content: center;
+  align-items: center;
+  height: 1.6em;
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(10px);
+}
+.loader-logo-text {
+  height: 32px;
+  width: auto;
+  display: block;
 }
 .loader-subtitle {
   font-size: 0.65rem;

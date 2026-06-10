@@ -39,7 +39,7 @@ function init() {
       }
     });
 
-    const chars = loader.querySelectorAll('.loader-char');
+    const textGroup = loader.querySelector('.loader-text-group');
     const subtitle = loader.querySelector('.loader-subtitle');
     const progressWrap = loader.querySelector('.loader-progress-wrap');
     const progressBar = document.getElementById('loaderProgressBar');
@@ -50,12 +50,11 @@ function init() {
     const DURATION = 2.8; // total loading time in seconds
     const circumference = 339.3; // 2 * PI * 54
 
-    // Phase 1: Characters stagger in
-    tl.to(chars, {
+    // Phase 1: Logo fades in
+    tl.to(textGroup, {
       y: 0,
       opacity: 1,
-      stagger: 0.08,
-      duration: 0.5,
+      duration: 0.7,
       ease: 'power3.out',
     });
 
