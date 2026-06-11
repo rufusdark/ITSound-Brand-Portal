@@ -142,6 +142,23 @@ export function initAnimations() {
     );
   });
 
+  // ── About text line reveal ──
+  gsap.fromTo('.about-line-inner', {
+    yPercent: 100,
+    opacity: 0,
+  }, {
+    yPercent: 0,
+    opacity: 1,
+    stagger: 0.15,
+    duration: 0.7,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: '.about-content',
+      start: 'top 80%',
+      toggleActions: 'play none none none',
+    },
+  });
+
   // ── Grid Card Staggers ──
   document.querySelectorAll('.artists-grid, .releases-grid, .services-grid, .territory-cards').forEach((grid) => {
     gsap.fromTo(grid.children,

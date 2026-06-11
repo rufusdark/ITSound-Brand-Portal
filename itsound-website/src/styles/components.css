@@ -856,6 +856,15 @@
 .about-content .section-text {
   text-align: left; margin-left: 0;
 }
+.about-line {
+  display: block;
+  overflow: hidden;
+}
+.about-line-inner {
+  display: block;
+  opacity: 0;
+  will-change: transform;
+}
 .stats-row {
   display: flex; gap: 48px;
   margin-top: 40px; padding-top: 28px;
