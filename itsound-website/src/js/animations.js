@@ -40,15 +40,16 @@ export function initAnimations() {
       duration: 1,
     }, 0.8);
 
-  // Subtitle
+  // Subtitle — split line reveal
   heroTL
-    .fromTo('.hero-subtitle', {
-      y: 40,
-      opacity: 0,
+    .set('.hero-subtitle', { opacity: 1 })
+    .fromTo('.subtitle-line-inner', {
+      yPercent: 100,
     }, {
-      y: 0,
-      opacity: 1,
-      duration: 0.8,
+      yPercent: 0,
+      stagger: 0.15,
+      duration: 0.9,
+      ease: 'power4.out',
     }, 0.9);
 
   // Buttons: stagger in
