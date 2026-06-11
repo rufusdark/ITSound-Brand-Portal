@@ -649,6 +649,16 @@
   font-size: clamp(1.2rem, 3vw, 2.2rem);
   letter-spacing: 4px;
   margin-top: 6px;
+  color: var(--purple-light);
+}
+.word {
+  display: inline-block;
+  white-space: nowrap;
+}
+.char {
+  display: inline-block;
+  opacity: 0; /* hidden until GSAP reveals */
+  will-change: transform, opacity;
 }
 
 /* Subtitle — split line reveal */

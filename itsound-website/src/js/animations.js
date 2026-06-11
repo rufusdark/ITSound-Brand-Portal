@@ -29,15 +29,18 @@ export function initAnimations() {
       ease: 'power4.out',
     }, 0.35)
 
-    .fromTo('.hero-line-2', {
-      y: 80,
+    .set('.hero-line-2', { opacity: 1, y: 0, x: 0 }, 0.79)
+    .fromTo('.char', {
+      y: 50,
       opacity: 0,
-      x: -30,
+      rotateZ: -15,
     }, {
       y: 0,
       opacity: 1,
-      x: 0,
-      duration: 1,
+      rotateZ: 0,
+      stagger: 0.04,
+      duration: 0.55,
+      ease: 'power3.out',
     }, 0.8);
 
   // Subtitle — split line reveal (yPercent + fade)
