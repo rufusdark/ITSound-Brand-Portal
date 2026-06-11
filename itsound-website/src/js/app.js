@@ -9,6 +9,7 @@ import { initNavigation } from './navigation.js';
 import { initSmoothScroll } from './scroll.js';
 import { initPlayer } from './player.js';
 import { initMouseParallax } from './parallax-mouse.js';
+import { initMagnetic } from './magnetic.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -53,6 +54,7 @@ function init() {
             // These can wait until loader is fully gone
             initCursor();
             initPlayer();
+            initMagnetic();
             // Mouse parallax dopo l'entrata GSAP (evita conflitto transform)
             setTimeout(initMouseParallax, 2000);
 
@@ -93,6 +95,7 @@ function init() {
     initHeroAnimation();
     initHeroParticles();
     initPlayer();
+    initMagnetic();
     setTimeout(initMouseParallax, 2000);
     setTimeout(initAnimations, 200);
   }
