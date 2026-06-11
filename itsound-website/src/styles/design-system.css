@@ -5,6 +5,8 @@
   --purple-light: #A78BFA;
   --cyan: #06D6A0;
   --amber: #F59E0B;
+  --red: #DC2626;
+  --red-dark: #B91C1C;
   --bg-primary: #0A0A0A;
   --bg-secondary: #141414;
   --bg-card: #1A1A1A;
@@ -123,13 +125,13 @@ body {
   white-space: nowrap;
 }
 .btn-primary {
-  background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+  background: linear-gradient(135deg, var(--red), var(--red-dark));
   color: white;
   border: none;
 }
 .btn-primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 35px rgba(139,92,246,0.3);
+  box-shadow: 0 12px 35px rgba(220,38,38,0.3);
 }
 .btn-outline {
   background: transparent;
@@ -137,8 +139,8 @@ body {
   border: 1px solid rgba(255,255,255,0.15);
 }
 .btn-outline:hover {
-  border-color: var(--purple);
-  background: rgba(139,92,246,0.08);
+  border-color: var(--red);
+  background: rgba(220,38,38,0.08);
   transform: translateY(-3px);
 }
 .btn-large {
