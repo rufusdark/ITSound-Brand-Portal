@@ -8,6 +8,7 @@ import { initAnimations } from './animations.js';
 import { initNavigation } from './navigation.js';
 import { initSmoothScroll } from './scroll.js';
 import { initPlayer } from './player.js';
+import { initMouseParallax } from './parallax-mouse.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -52,6 +53,8 @@ function init() {
             // These can wait until loader is fully gone
             initCursor();
             initPlayer();
+            // Mouse parallax dopo l'entrata GSAP (evita conflitto transform)
+            setTimeout(initMouseParallax, 2000);
 
             // Give Lenis + ScrollTrigger a frame to settle
             requestAnimationFrame(() => {
@@ -90,6 +93,7 @@ function init() {
     initHeroAnimation();
     initHeroParticles();
     initPlayer();
+    setTimeout(initMouseParallax, 2000);
     setTimeout(initAnimations, 200);
   }
 }
