@@ -40,9 +40,8 @@ export function initAnimations() {
       duration: 1,
     }, 0.8);
 
-  // Subtitle — split line reveal
+  // Subtitle — split line reveal (yPercent nascosto da overflow:hidden)
   heroTL
-    .set('.hero-subtitle', { opacity: 1 })
     .fromTo('.subtitle-line-inner', {
       yPercent: 100,
     }, {
