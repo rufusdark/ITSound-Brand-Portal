@@ -559,13 +559,26 @@
   .hero-decor { display: none; }
 }
 
-/* Hero Content */
-.hero-content {
+/* Hero Inner — Split Layout */
+.hero-inner {
   position: relative; z-index: 3;
-  max-width: 780px;
+  display: flex;
+  align-items: center;
+  gap: clamp(40px, 5vw, 80px);
+  max-width: 1100px;
   width: 100%;
-  padding: 120px 40px 60px;
-  text-align: left;
+  padding: 100px 40px;
+}
+
+.hero-text {
+  flex: 1;
+  min-width: 0;
+  max-width: 620px;
+}
+
+.hero-player-col {
+  flex-shrink: 0;
+  width: 340px;
 }
 
 /* Hidden until GSAP reveal — prevents flash */
@@ -1180,10 +1193,7 @@
 
 /* ─── ITSOUND CUSTOM PLAYER ─── */
 .its-player {
-  position: absolute;
-  bottom: 100px; right: 40px;
-  z-index: 10;
-  width: 340px;
+  width: 100%;
   background: rgba(10,10,10,0.75);
   backdrop-filter: blur(24px) saturate(1.4);
   border: 1px solid rgba(139,92,246,0.12);
@@ -1354,10 +1364,8 @@
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .stats-row { gap: 28px; }
   .stat-num { font-size: 1.4rem; }
-  .its-player {
-    bottom: 40px; right: 24px;
-    width: 300px;
-  }
+  .hero-player-col { width: 280px; }
+  .hero-inner { gap: clamp(24px, 4vw, 60px); }
 }
 @media (max-width: 768px) {
   .nav-links { display: none; }
@@ -1367,17 +1375,23 @@
     gap: 4px;
   }
   .nav-logo-img { height: 24px; }
+  .hero-inner {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 100px 24px 24px;
+    gap: 32px;
+  }
+  .hero-text {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+  }
   .hero-badge { font-size: 0.6rem; padding: 6px 14px 6px 10px; }
   .hero-actions .btn { width: 100%; }
   .hero { flex-direction: column; justify-content: flex-start; align-items: stretch; }
-  .hero-content { padding: 100px 24px 24px; }
   .hero-meta { gap: 8px; flex-wrap: wrap; padding-top: 20px; margin-top: 32px; }
-  .its-player {
-    position: relative;
-    bottom: auto; right: auto;
-    width: calc(100% - 48px);
-    margin: 0 24px 24px;
-  }
+  .hero-player-col { width: 100%; max-width: 360px; }
   .footer-grid { grid-template-columns: 1fr; }
   .territory-cards { grid-template-columns: 1fr; }
 }

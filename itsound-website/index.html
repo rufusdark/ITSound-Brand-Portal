@@ -114,45 +114,52 @@
       <div class="hero-bg-overlay"></div>
       <div class="hero-grid" aria-hidden="true"></div>
     </div>
-    <div class="hero-content">
-      <div class="hero-badge">
-        <span class="pulse-dot pulse-dot--live"></span>
-        Since 2020 · Martina Franca
+    <div class="hero-inner">
+      <!-- Left column: text content (60%) -->
+      <div class="hero-text">
+        <div class="hero-badge">
+          <span class="pulse-dot pulse-dot--live"></span>
+          Since 2020 · Martina Franca
+        </div>
+        <h1 class="hero-title">
+          <span class="hero-line hero-line-1">
+            <span class="char">I</span>
+            <span class="char">T</span>
+            <span class="char">S</span>
+            <span class="char">o</span>
+            <span class="char">u</span>
+            <span class="char">n</span>
+            <span class="char">d</span>
+          </span>
+          <span class="hero-line hero-line-2">
+            <span class="gradient-text">Record Label</span>
+          </span>
+        </h1>
+        <p class="hero-subtitle">
+          Da Martina Franca al mondo. Collaboriamo con DJ, producer e artisti
+          emergenti per trasformare la tua visione in musica.
+        </p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn btn-primary magnetic-btn">
+            <span class="btn-text">Invia il tuo Demo</span>
+            <i class="fas fa-arrow-right"></i>
+          </a>
+          <a href="#services" class="btn btn-outline magnetic-btn">
+            <i class="fas fa-headphones"></i>
+            <span class="btn-text">I Nostri Servizi</span>
+          </a>
+        </div>
+        <div class="hero-meta">
+          <span class="hero-meta-item">15+ Artisti</span>
+          <span class="hero-meta-dot" aria-hidden="true"></span>
+          <span class="hero-meta-item">50+ Release</span>
+          <span class="hero-meta-dot" aria-hidden="true"></span>
+          <span class="hero-meta-item">Distribuzione Globale</span>
+        </div>
       </div>
-      <h1 class="hero-title">
-        <span class="hero-line hero-line-1">
-          <span class="char">I</span>
-          <span class="char">T</span>
-          <span class="char">S</span>
-          <span class="char">o</span>
-          <span class="char">u</span>
-          <span class="char">n</span>
-          <span class="char">d</span>
-        </span>
-        <span class="hero-line hero-line-2">
-          <span class="gradient-text">Record Label</span>
-        </span>
-      </h1>
-      <p class="hero-subtitle">
-        Da Martina Franca al mondo. Collaboriamo con DJ, producer e artisti
-        emergenti per trasformare la tua visione in musica.
-      </p>
-      <div class="hero-actions">
-        <a href="#contact" class="btn btn-primary magnetic-btn">
-          <span class="btn-text">Invia il tuo Demo</span>
-          <i class="fas fa-arrow-right"></i>
-        </a>
-        <a href="#services" class="btn btn-outline magnetic-btn">
-          <i class="fas fa-headphones"></i>
-          <span class="btn-text">I Nostri Servizi</span>
-        </a>
-      </div>
-      <div class="hero-meta">
-        <span class="hero-meta-item">15+ Artisti</span>
-        <span class="hero-meta-dot" aria-hidden="true"></span>
-        <span class="hero-meta-item">50+ Release</span>
-        <span class="hero-meta-dot" aria-hidden="true"></span>
-        <span class="hero-meta-item">Distribuzione Globale</span>
+      <!-- Right column: player (40%) -->
+      <div class="hero-player-col">
+        <div class="its-player" id="itsoundPlayer"></div>
       </div>
     </div>
     <!-- Floating Geometric Decorations (techno aesthetic) -->
@@ -168,9 +175,6 @@
     <canvas id="heroParticles" class="hero-particles" aria-hidden="true"></canvas>
     <!-- Enhanced EQ waveform animation -->
     <canvas id="heroWaveform" class="hero-waveform" aria-hidden="true"></canvas>
-    
-    <!-- ITSound Custom Player -->
-    <div class="its-player" id="itsoundPlayer"></div>
     
     <div class="hero-corner-tl" aria-hidden="true"></div>
     <div class="hero-corner-br" aria-hidden="true"></div>
