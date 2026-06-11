@@ -1516,7 +1516,7 @@
   }
   .hero-badge { font-size: 0.6rem; padding: 6px 14px 6px 10px; }
   .hero-actions .btn { width: 100%; }
-  .hero { flex-direction: column; justify-content: flex-start; align-items: stretch; }
+  .hero { flex-direction: column; justify-content: flex-start; align-items: stretch; min-height: 70vh; }
   .hero-meta { gap: 8px; flex-wrap: wrap; padding-top: 20px; margin-top: 32px; }
   .hero-player-col { width: 100%; max-width: 360px; }
   .footer-grid { grid-template-columns: 1fr; }
