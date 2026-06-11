@@ -1,7 +1,10 @@
 /**
  * ITSound Custom Web Player
  * Premium glassmorphism player with album rotation
+ * GSAP-driven track change animations (exit → swap → staggered enter)
  */
+
+import { gsap } from 'gsap';
 
 const ALBUMS = [
   {
@@ -33,146 +36,240 @@ const ALBUMS = [
 let currentIndex = 0;
 let rotationTimer = null;
 const ROTATION_INTERVAL = 8000; // 8 seconds
+let progressRAF = null;
+let progressStartTime = Date.now();
+const PROGRESS_DURATION = 210; // 3:30 in seconds
 
 export function initPlayer() {
   const container = document.getElementById('itsoundPlayer');
   if (!container) return;
 
-  renderAlbum(currentIndex);
+  // Build stable structure: .its-player-inner (animated) + .its-player-embed (stable)
+  container.innerHTML = `
+    <div class="its-player-inner"></div>
+    <div class="its-player-embed">
+      <iframe style="border-radius:12px;width:100%;height:80px;"
+        width="100%" height="80" frameborder="0"
+        allowtransparency="true"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy" title="Spotify Player"></iframe>
+    </div>
+  `;
 
-  // Play button
-  const playBtn = document.getElementById('itsPlayBtn');
-  if (playBtn) {
-    playBtn.addEventListener('click', () => {
-      playBtn.classList.add('playing');
-      playBtn.innerHTML = '<i class="fas fa-spotify"></i>';
-      window.open(ALBUMS[currentIndex].url, '_blank');
-      setTimeout(() => {
-        playBtn.classList.remove('playing');
-        playBtn.innerHTML = '<i class="fas fa-play"></i>';
-      }, 3000);
-    });
-  }
+  // First render — no animation (GSAP entrance handles the hero reveal)
+  renderInner(currentIndex, false);
 
-  // Start rotation
-  startRotation();
-
-  // Next/prev click on album art
-  const art = container.querySelector('.its-player-art');
-  if (art) {
-    art.addEventListener('click', () => {
-      nextAlbum();
-      resetRotation();
-    });
-    art.style.cursor = 'pointer';
-    art.title = 'Clicca per la prossima release';
-  }
+  // Re-bind events
+  bindPlayerEvents(container);
 
   // Keyboard: arrow right for next
   document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight' && document.activeElement?.tagName !== 'INPUT') {
       nextAlbum();
-      resetRotation();
     }
   });
 
-  // Simulate progress
+  // Start auto-rotation
+  startRotation();
+
+  // Progress bar
   animateProgress();
 }
 
-function renderAlbum(index) {
-  const album = ALBUMS[index];
+// ─── Render the animated inner content ───
+
+function renderInner(index, animate = true) {
   const container = document.getElementById('itsoundPlayer');
   if (!container) return;
 
-  // Update embed
-  const embedContainer = container.querySelector('.its-player-embed');
-  const existingIframe = container.querySelector('#itsSpotifyEmbed');
+  const album = ALBUMS[index];
+  const inner = container.querySelector('.its-player-inner');
+  const embedFrame = container.querySelector('.its-player-embed iframe');
+  if (!inner) return;
 
-  container.innerHTML = `
-    <div class="its-player-inner">
-      <div class="its-player-art">
-        <img src="${album.art}" alt="${album.title}" loading="lazy" class="its-player-art-img" />
-        <div class="its-player-art-overlay">
-          <i class="fas fa-redo-alt"></i>
-        </div>
-      </div>
-      <div class="its-player-info">
-        <span class="its-player-label">${ALBUMS.length > 1 ? `${index + 1}/${ALBUMS.length} · ` : ''}Ultima Release</span>
-        <h3 class="its-player-title">${album.title}</h3>
-        <span class="its-player-artist">${album.artist}</span>
-        <span class="its-player-genre">${album.genre}</span>
-        <div class="its-player-controls">
-          <button class="its-player-btn its-player-play" id="itsPlayBtn" aria-label="Play on Spotify">
-            <i class="fas fa-play"></i>
-          </button>
-          <div class="its-player-progress" id="itsProgress">
-            <div class="its-player-progress-bar" id="itsProgressBar">
-              <div class="its-player-progress-fill" id="itsProgressFill"></div>
-            </div>
-            <div class="its-player-time">
-              <span id="itsTimeCurrent">0:00</span>
-              <span id="itsTimeTotal">3:30</span>
-            </div>
-          </div>
-          <div class="its-player-extra">
-            <a href="${album.url}" target="_blank" rel="noopener" class="its-player-spotify-link" title="Ascolta su Spotify">
-              <i class="fab fa-spotify"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="its-player-embed">
-      <iframe 
-        id="itsSpotifyEmbed"
-        style="border-radius:12px;width:100%;height:80px;"
-        src="https://open.spotify.com/embed/album/${album.id}?utm_source=itsound"
-        width="100%" height="80"
-        frameborder="0" 
-        allowtransparency="true" 
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-        loading="lazy"
-        title="Spotify Player"
-      ></iframe>
-    </div>
-  `;
-
-  // Add entrance animation class to art
-  const img = container.querySelector('.its-player-art-img');
-  if (img) {
-    img.style.transition = 'opacity 0.6s ease';
+  if (!animate) {
+    // First load — instant, no transition
+    inner.innerHTML = buildInnerHTML(album, index);
+    if (embedFrame) embedFrame.src = `https://open.spotify.com/embed/album/${album.id}?utm_source=itsound`;
+    resetProgress();
+    return;
   }
 
-  // Re-bind play button
-  const playBtn = document.getElementById('itsPlayBtn');
+  // ── Animated track change ──
+  const tl = gsap.timeline({
+    onComplete: () => {
+      bindPlayerEvents(container);
+    },
+  });
+
+  // 1) EXIT: current content slides out to the left
+  tl.to(inner, {
+    opacity: 0,
+    scale: 0.85,
+    x: -40,
+    rotation: -4,
+    duration: 0.3,
+    ease: 'power2.in',
+  });
+
+  // 2) SWAP: update DOM + iframe
+  tl.call(() => {
+    inner.innerHTML = buildInnerHTML(album, index);
+    if (embedFrame) embedFrame.src = `https://open.spotify.com/embed/album/${album.id}?utm_source=itsound`;
+    resetProgress();
+
+    // Grab fresh child references for the "in" phase
+    // (GSAP will evaluate them at call-time, but we pass explicit refs for safety)
+    window._itsPlayerArt = inner.querySelector('.its-player-art');
+    window._itsPlayerInfo = inner.querySelector('.its-player-info');
+    window._itsPlayerControls = inner.querySelector('.its-player-controls');
+  });
+
+  // Set the new inner to its starting state (off-stage right)
+  tl.set(inner, {
+    opacity: 0,
+    scale: 0.88,
+    x: 40,
+    rotation: 3,
+  }, '>');
+
+  // 3) ENTER: the whole inner bounces in
+  tl.to(inner, {
+    opacity: 1,
+    scale: 1,
+    x: 0,
+    rotation: 0,
+    duration: 0.55,
+    ease: 'back.out(1.4)',
+  });
+
+  // 4) STAGGER: child elements reveal with premium feel
+  // Album art spins in from a slight rotation
+  if (window._itsPlayerArt) {
+    tl.fromTo(window._itsPlayerArt, {
+      opacity: 0,
+      scale: 0.6,
+      rotation: -15,
+    }, {
+      opacity: 1,
+      scale: 1,
+      rotation: 0,
+      duration: 0.5,
+      ease: 'back.out(1.7)',
+    }, '-=0.45');
+  }
+
+  // Info (title, artist, genre, label) slides up
+  if (window._itsPlayerInfo) {
+    tl.fromTo(window._itsPlayerInfo, {
+      opacity: 0,
+      y: 24,
+    }, {
+      opacity: 1,
+      y: 0,
+      duration: 0.4,
+      ease: 'power3.out',
+    }, '-=0.3');
+  }
+
+  // Controls (buttons, progress) fade up slightly delayed
+  if (window._itsPlayerControls) {
+    tl.fromTo(window._itsPlayerControls, {
+      opacity: 0,
+      y: 14,
+    }, {
+      opacity: 1,
+      y: 0,
+      duration: 0.35,
+      ease: 'power2.out',
+    }, '-=0.2');
+  }
+
+  // Clean up global refs after timeline completes
+  tl.call(() => {
+    window._itsPlayerArt = null;
+    window._itsPlayerInfo = null;
+    window._itsPlayerControls = null;
+  });
+}
+
+// ─── Build the inner HTML string ───
+
+function buildInnerHTML(album, index) {
+  return `
+    <div class="its-player-art">
+      <img src="${album.art}" alt="${album.title}" loading="lazy" class="its-player-art-img" />
+      <div class="its-player-art-overlay">
+        <i class="fas fa-redo-alt"></i>
+      </div>
+    </div>
+    <div class="its-player-info">
+      <span class="its-player-label">${ALBUMS.length > 1 ? `${index + 1}/${ALBUMS.length} · ` : ''}Ultima Release</span>
+      <h3 class="its-player-title">${album.title}</h3>
+      <span class="its-player-artist">${album.artist}</span>
+      <span class="its-player-genre">${album.genre}</span>
+      <div class="its-player-controls">
+        <button class="its-player-btn its-player-play" aria-label="Play on Spotify">
+          <i class="fas fa-play"></i>
+        </button>
+        <div class="its-player-progress">
+          <div class="its-player-progress-bar">
+            <div class="its-player-progress-fill"></div>
+          </div>
+          <div class="its-player-time">
+            <span class="its-time-current">0:00</span>
+            <span class="its-time-total">3:30</span>
+          </div>
+        </div>
+        <div class="its-player-extra">
+          <a href="${album.url}" target="_blank" rel="noopener" class="its-player-spotify-link" title="Ascolta su Spotify">
+            <i class="fab fa-spotify"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ─── Event binding (re-called after each DOM swap) ───
+
+function bindPlayerEvents(container) {
+  // Play button → open Spotify
+  const playBtn = container.querySelector('.its-player-play');
   if (playBtn) {
-    playBtn.addEventListener('click', () => {
-      playBtn.classList.add('playing');
-      playBtn.innerHTML = '<i class="fas fa-spotify"></i>';
+    // Remove any stale listeners via clone trick or just use one listener
+    playBtn.replaceWith(playBtn.cloneNode(true));
+    const freshBtn = container.querySelector('.its-player-play');
+    freshBtn.addEventListener('click', () => {
+      freshBtn.classList.add('playing');
+      freshBtn.innerHTML = '<i class="fas fa-spotify"></i>';
       window.open(ALBUMS[currentIndex].url, '_blank');
       setTimeout(() => {
-        playBtn.classList.remove('playing');
-        playBtn.innerHTML = '<i class="fas fa-play"></i>';
+        freshBtn.classList.remove('playing');
+        freshBtn.innerHTML = '<i class="fas fa-play"></i>';
       }, 3000);
     });
   }
 
-  // Re-bind click on art
+  // Album art click → next
   const artEl = container.querySelector('.its-player-art');
   if (artEl) {
-    artEl.addEventListener('click', () => {
-      nextAlbum();
-      resetRotation();
-    });
     artEl.style.cursor = 'pointer';
     artEl.title = 'Clicca per la prossima release';
+    artEl.replaceWith(artEl.cloneNode(true));
+    const freshArt = container.querySelector('.its-player-art');
+    freshArt.addEventListener('click', () => {
+      nextAlbum();
+    });
   }
 }
 
+// ─── Track navigation ───
+
 function nextAlbum() {
   currentIndex = (currentIndex + 1) % ALBUMS.length;
-  renderAlbum(currentIndex);
+  renderInner(currentIndex, true);
+  resetRotation();
 }
 
 function startRotation() {
@@ -195,31 +292,39 @@ function resetRotation() {
   startRotation();
 }
 
+// ─── Progress bar (continuous, reset on track change) ───
+
+function resetProgress() {
+  progressStartTime = Date.now();
+  const fill = document.querySelector('.its-player-progress-fill');
+  const current = document.querySelector('.its-time-current');
+  if (fill) fill.style.width = '0%';
+  if (current) current.textContent = '0:00';
+}
+
 function animateProgress() {
-  const fill = document.getElementById('itsProgressFill');
-  const current = document.getElementById('itsTimeCurrent');
-  if (!fill || !current) return;
-
-  const duration = 210; // 3:30 in seconds
-  let startTime = Date.now();
-
   function tick() {
-    const elapsed = (Date.now() - startTime) / 1000;
-    const progress = Math.min(elapsed / duration, 1);
-    
-    fill.style.width = `${progress * 100}%`;
-    
-    const mins = Math.floor(elapsed / 60);
-    const secs = Math.floor(elapsed % 60);
-    current.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+    const elapsed = (Date.now() - progressStartTime) / 1000;
+    const pct = Math.min(elapsed / PROGRESS_DURATION, 1);
 
-    if (progress < 1) {
-      requestAnimationFrame(tick);
+    const fill = document.querySelector('.its-player-progress-fill');
+    const current = document.querySelector('.its-time-current');
+
+    if (fill) fill.style.width = `${pct * 100}%`;
+    if (current) {
+      const mins = Math.floor(elapsed / 60);
+      const secs = Math.floor(elapsed % 60);
+      current.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    if (pct < 1) {
+      progressRAF = requestAnimationFrame(tick);
     } else {
+      // Track "ended" — wait then loop
       setTimeout(() => {
-        startTime = Date.now();
-        animateProgress();
-      }, 2000);
+        progressStartTime = Date.now();
+        tick();
+      }, 3000);
     }
   }
 
