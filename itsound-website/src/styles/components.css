@@ -583,7 +583,7 @@
 
 /* Hidden until GSAP reveal — prevents flash */
 .hero-badge,
-.hero-line-1 .char,
+.hero-logo-img,
 .hero-line-2,
 .hero-subtitle,
 .hero-actions .btn,
@@ -637,9 +637,12 @@
 }
 .hero-line-1 {
   letter-spacing: -2px;
+  line-height: 1;
 }
-.hero-line-1 .char {
-  display: inline-block;
+.hero-logo-img {
+  display: block;
+  width: auto;
+  height: clamp(40px, 6vw, 80px);
   will-change: transform, opacity, filter;
 }
 .hero-line-2 {
