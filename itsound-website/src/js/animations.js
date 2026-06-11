@@ -92,6 +92,24 @@ export function initAnimations() {
       duration: 0.7,
     }, 1.3);
 
+  // Hero counters: animate numbers (0→15, 0→50)
+  document.querySelectorAll('.hero-meta .counter').forEach((el) => {
+    const target = parseInt(el.dataset.target) || 0;
+    const suffix = el.dataset.suffix || '';
+    const baseText = el.nextSibling ? el.nextSibling.textContent : '';
+    heroTL
+      .fromTo(el, { textContent: 0 }, {
+        textContent: target,
+        duration: 1.8,
+        ease: 'power2.out',
+        snap: { textContent: 1 },
+        onUpdate: function () {
+          const val = Math.round(gsap.getProperty(this.targets()[0], 'textContent'));
+          el.textContent = val + suffix;
+        },
+      }, 1.5);
+  });
+
   // Scroll indicator: fade in last
   heroTL
     .fromTo('.scroll-indicator', {
