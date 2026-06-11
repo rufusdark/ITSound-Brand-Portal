@@ -12,7 +12,7 @@ export function initHero() {
 
   window.addEventListener('scroll', () => {
     const rect = hero.getBoundingClientRect();
-    const progress = 1 - (rect.top + rect.height) / (window.innerHeight + rect.height);
+    const progress = -rect.top / rect.height;
     const offset = Math.max(0, Math.min(1, progress));
     bg.style.transform = `translateY(${offset * 60}px) scale(${1 + offset * 0.05})`;
   }, { passive: true });
