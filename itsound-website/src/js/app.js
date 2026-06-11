@@ -11,6 +11,7 @@ import { initPlayer } from './player.js';
 import { initMouseParallax } from './parallax-mouse.js';
 import { initMagnetic } from './magnetic.js';
 import { initFloatingPlayer } from './floating-player.js';
+import { initAboutWaves } from './about-waves.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -57,6 +58,7 @@ function init() {
             initPlayer();
             initMagnetic();
             initFloatingPlayer();
+            initAboutWaves();
             // Mouse parallax dopo l'entrata GSAP (evita conflitto transform)
             setTimeout(initMouseParallax, 2000);
 
@@ -99,6 +101,7 @@ function init() {
     initPlayer();
     initFloatingPlayer();
     initMagnetic();
+    initAboutWaves();
     setTimeout(initMouseParallax, 2000);
     setTimeout(initAnimations, 200);
   }

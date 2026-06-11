@@ -222,10 +222,12 @@
 
   <!-- ABOUT / LABEL -->
   <section class="section about" id="about">
+    <canvas id="aboutWaves" aria-hidden="true"></canvas>
     <div class="container">
       <div class="about-grid">
         <div class="about-visual parallax-wrap">
-          <div class="about-bg-text" aria-hidden="true">IT</div>
+          <div class="about-bg" style="background-image: url(/about-martina-franca.webp)"></div>
+          <div class="about-overlay"></div>
           <div class="about-frame"></div>
           <div class="about-badge">
             <span class="badge-year">Dal 2022</span>
@@ -239,18 +241,51 @@
             <span class="about-line"><span class="about-line-inner">ITSound nasce a Martina Franca dalla passione di Marco e Andrea per la musica.</span></span>
             <span class="about-line"><span class="about-line-inner">Siamo una record label che collabora con DJ, producer e artisti emergenti, offrendo servizi completi: dalla produzione alla promozione.</span></span>
           </p>
-          <div class="stats-row">
-            <div class="stat">
-              <span class="stat-num counter" data-target="2022">0</span>
-              <span class="stat-label">Fondazione</span>
+          <div class="stats-row" id="statsRow">
+            <div class="stat-card" data-expandable>
+              <div class="stat-card-header">
+                <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+                <span class="stat-num counter" data-target="2022">0</span>
+                <div class="stat-bar"><span class="stat-bar-fill" style="width: 0%"></span></div>
+                <span class="stat-label">Fondazione</span>
+                <div class="stat-chevron"><i class="fas fa-chevron-down"></i></div>
+              </div>
+              <div class="stat-expand">
+                <div class="stat-expand-inner">
+                  <p>Marco Carbotti e Andrea fondano ITSound a Martina Franca con la missione di portare l'elettronica pugliese nel mondo.</p>
+                  <span class="stat-expand-tag">2022 · Martina Franca</span>
+                </div>
+              </div>
             </div>
-            <div class="stat">
-              <span class="stat-num counter" data-target="50" data-suffix="+">0</span>
-              <span class="stat-label">Tracce</span>
+            <div class="stat-card" data-expandable>
+              <div class="stat-card-header">
+                <div class="stat-icon"><i class="fas fa-music"></i></div>
+                <span class="stat-num counter" data-target="50" data-suffix="+">0</span>
+                <div class="stat-bar"><span class="stat-bar-fill" style="width: 0%"></span></div>
+                <span class="stat-label">Tracce Prodotte</span>
+                <div class="stat-chevron"><i class="fas fa-chevron-down"></i></div>
+              </div>
+              <div class="stat-expand">
+                <div class="stat-expand-inner">
+                  <p>Da "Titanium" a "Make You Mine", ogni traccia è prodotta con cura tra remix, originali e ghost production per artisti emergenti.</p>
+                  <span class="stat-expand-tag">Album · Singoli · Remix</span>
+                </div>
+              </div>
             </div>
-            <div class="stat">
-              <span class="stat-num counter" data-target="100" data-suffix="%">0</span>
-              <span class="stat-label">Passione</span>
+            <div class="stat-card" data-expandable>
+              <div class="stat-card-header">
+                <div class="stat-icon"><i class="fas fa-microphone-alt"></i></div>
+                <span class="stat-num counter" data-target="15" data-suffix="+">0</span>
+                <div class="stat-bar"><span class="stat-bar-fill" style="width: 0%"></span></div>
+                <span class="stat-label">Artisti</span>
+                <div class="stat-chevron"><i class="fas fa-chevron-down"></i></div>
+              </div>
+              <div class="stat-expand">
+                <div class="stat-expand-inner">
+                  <p>Collaboriamo con DJ, producer e cantanti emergenti dalla Puglia e da tutta Italia, offrendo produzione, mixing e promozione.</p>
+                  <span class="stat-expand-tag">DJ · Producer · Cantanti</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

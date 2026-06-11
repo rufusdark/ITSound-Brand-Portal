@@ -179,47 +179,126 @@ export function initAnimations() {
     );
   });
 
-  // ── Counters ──
-  document.querySelectorAll('.counter').forEach((el) => {
-    const target = parseInt(el.dataset.target) || 0;
-    const suffix = el.dataset.suffix || '';
-    gsap.fromTo(el,
-      { textContent: 0 },
-      {
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        },
+  // ── Enhanced "By the Numbers" Counters ──
+  const statsRow = document.getElementById('statsRow');
+  if (statsRow) {
+    const statCards = statsRow.querySelectorAll('.stat-card');
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: statsRow,
+        start: 'top 82%',
+        toggleActions: 'play none none none',
+      },
+    });
+
+    // Stagger card entrance
+    tl.fromTo(statCards,
+      { y: 30, opacity: 0 },
+      { y: 0, opacity: 1, stagger: 0.12, duration: 0.6, ease: 'power3.out' }
+    );
+
+    // Animate each counter + bar
+    statCards.forEach((card, i) => {
+      const numEl = card.querySelector('.counter');
+      const barFill = card.querySelector('.stat-bar-fill');
+      const target = parseInt(numEl.dataset.target) || 0;
+      const suffix = numEl.dataset.suffix || '';
+
+      // Bar fill: map target to percentage (cap at 100)
+      const pct = Math.min(target, 100);
+
+      tl.to(barFill, { width: pct + '%', duration: 0.8, ease: 'power2.out' }, `>-0.3`);
+      tl.to(numEl, {
         textContent: target,
-        duration: 2,
+        duration: 1.6,
         ease: 'power2.out',
         snap: { textContent: 1 },
         onUpdate: function () {
           const val = Math.round(gsap.getProperty(this.targets()[0], 'textContent'));
-          el.textContent = val + suffix;
+          numEl.textContent = val + suffix;
         },
+      }, `>-0.6`);
+    });
+  }
+
+  // ── Parallax Wrap ──
+  document.querySelectorAll('.parallax-wrap').forEach((el) => {
+    gsap.fromTo(el.querySelector('.about-bg'),
+      {
+        y: 0,
+        scale: 1,
+      },
+      {
+        scrollTrigger: {
+          trigger: el,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.5,
+        },
+        y: -30,
+        scale: 1.04,
+        ease: 'none',
       }
     );
   });
 
-  // ── Parallax Wrap ──
-  document.querySelectorAll('.parallax-wrap').forEach((el) => {
-    gsap.to(el.querySelector('.about-bg-text'), {
-      scrollTrigger: {
-        trigger: el,
-        start: 'top bottom',
-        end: 'bottom top',
-        scrub: 1,
-      },
-      y: -40,
-      ease: 'none',
-    });
-  });
+  // ── Stat Card Expand on Click (accordion) ──
+  initStatCards();
 
   ScrollTrigger.refresh();
 }
 
 export function refreshAnimations() {
   ScrollTrigger.refresh();
+}
+
+function initStatCards() {
+  const cards = document.querySelectorAll('.stat-card[data-expandable]');
+  if (!cards.length) return;
+
+  cards.forEach((card) => {
+    const header = card.querySelector('.stat-card-header');
+    const expand = card.querySelector('.stat-expand');
+    const inner = card.querySelector('.stat-expand-inner');
+    if (!header || !expand || !inner) return;
+
+    header.addEventListener('click', (e) => {
+      e.stopPropagation();
+
+      const isOpen = card.classList.contains('is-open');
+
+      // Close all cards first
+      cards.forEach((other) => {
+        if (other !== card && other.classList.contains('is-open')) {
+          const otherExpand = other.querySelector('.stat-expand');
+          other.classList.remove('is-open');
+          gsap.to(otherExpand, {
+            maxHeight: 0,
+            duration: 0.4,
+            ease: 'power3.inOut',
+          });
+        }
+      });
+
+      if (isOpen) {
+        // Close this card
+        card.classList.remove('is-open');
+        gsap.to(expand, {
+          maxHeight: 0,
+          duration: 0.4,
+          ease: 'power3.inOut',
+        });
+      } else {
+        // Open this card
+        card.classList.add('is-open');
+        // Get scrollHeight of the inner content
+        const h = inner.scrollHeight;
+        gsap.to(expand, {
+          maxHeight: h + 2,
+          duration: 0.5,
+          ease: 'power3.inOut',
+        });
+      }
+    });
+  });
 }
