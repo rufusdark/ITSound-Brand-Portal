@@ -642,7 +642,7 @@
 .hero-logo-img {
   display: block;
   width: auto;
-  height: clamp(40px, 6vw, 80px);
+  height: clamp(50px, 8vw, 110px);
   will-change: transform, opacity, filter;
 }
 .hero-line-2 {
