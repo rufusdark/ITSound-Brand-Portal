@@ -668,6 +668,7 @@
 .subtitle-line-inner {
   display: block;
   will-change: transform;
+  opacity: 0; /* anti-flash: hidden until GSAP reveal */
 }
 
 /* Actions */

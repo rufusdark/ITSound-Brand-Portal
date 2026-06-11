@@ -40,12 +40,14 @@ export function initAnimations() {
       duration: 1,
     }, 0.8);
 
-  // Subtitle — split line reveal (yPercent nascosto da overflow:hidden)
+  // Subtitle — split line reveal (yPercent + fade)
   heroTL
     .fromTo('.subtitle-line-inner', {
       yPercent: 100,
+      opacity: 0,
     }, {
       yPercent: 0,
+      opacity: 1,
       stagger: 0.15,
       duration: 0.9,
       ease: 'power4.out',
