@@ -3,533 +3,190 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ITSound — Record Label · Martina Franca</title>
-  <meta name="description" content="ITSound — Record Label di Martina Franca. Mixing, mastering, ghost production e promozione musicale." />
+  <title>ITSound, record label di Martina Franca</title>
+  <meta name="description" content="ITSound è la record label di Martina Franca. Mixing, mastering, ghost production e promozione per DJ e producer." />
   <meta name="theme-color" content="#0A0A0A" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet" href="/src/styles/reset.css" />
-  <link rel="stylesheet" href="/src/styles/design-system.css" />
-  <link rel="stylesheet" href="/src/styles/components.css" />
-  <link rel="stylesheet" href="/src/styles/animations.css" />
-  <script type="module" src="/src/js/app.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/styles/poster.css" />
+  <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
-  <!-- Noise overlay -->
-  <div class="noise-overlay" aria-hidden="true"></div>
-  
-  <!-- Scroll progress bar -->
-  <div class="scroll-progress" id="scrollProgress"></div>
-
-  <!-- Cinematic Preloader -->
-  <div class="page-loader" id="pageLoader">
-    <div class="loader-bg"></div>
-    <div class="loader-content">
-      <!-- Rotating ring with dashes -->
-      <div class="loader-ring-outer" id="loaderRing">
-        <svg class="loader-ring-svg" viewBox="0 0 120 120" width="120" height="120">
-          <circle class="loader-ring-track" cx="60" cy="60" r="54" fill="none" stroke="rgba(139,92,246,0.08)" stroke-width="1.5"/>
-          <circle class="loader-ring-progress" id="loaderRingProgress" cx="60" cy="60" r="54" fill="none" stroke="url(#loaderGrad)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="339.3" stroke-dashoffset="339.3" transform="rotate(-90 60 60)"/>
-          <defs>
-            <linearGradient id="loaderGrad" x1="0" y1="0" x2="120" y2="120">
-              <stop offset="0%" stop-color="#8B5CF6"/>
-              <stop offset="100%" stop-color="#A78BFA"/>
-            </linearGradient>
-          </defs>
-        </svg>
-        <!-- Inner spinning disc -->
-        <div class="loader-disc" id="loaderDisc">
-          <img src="/logo.png" alt="ITSound" class="loader-logo" />
-        </div>
-      </div>
-      <!-- Text reveal -->
-      <div class="loader-text-group">
-        <img src="/logo.png" alt="ITSound" class="loader-logo-text" />
-      </div>
-      <div class="loader-subtitle">Record Label · Martina Franca</div>
-    </div>
-    <div class="loader-progress-wrap">
-      <div class="loader-progress-bar" id="loaderProgressBar"></div>
-    </div>
-    <div class="loader-progress-pct" id="loaderProgressPct">0%</div>
-  </div>
-
-  <!-- Navigation Island -->
-  <nav class="navbar" id="navbar">
-    <div class="nav-island">
-      <a href="#" class="nav-logo" aria-label="ITSound Home">
-        <img src="/logo.png" alt="ITSound" class="nav-logo-img" />
+  <header class="hero" id="top">
+    <nav class="nav" aria-label="Principale">
+      <a class="wordmark" href="#top">
+        <img src="/logo.png" alt="ITSound" width="148" height="36" />
       </a>
-      <div class="nav-links" id="navLinks">
-        <a href="#hero" class="nav-link active">Home</a>
-        <span class="nav-divider"></span>
-        <a href="#about" class="nav-link">Label</a>
-        <span class="nav-divider"></span>
-        <a href="#artists" class="nav-link">Artisti</a>
-        <span class="nav-divider"></span>
-        <a href="#releases" class="nav-link">Release</a>
-        <span class="nav-divider"></span>
-        <a href="#services" class="nav-link">Servizi</a>
-        <span class="nav-divider"></span>
-        <a href="#contact" class="nav-link nav-cta">Contatti</a>
+      <div class="nav-links">
+        <a href="#about">Label</a>
+        <a href="#releases">Release</a>
+        <a href="#services">Servizi</a>
       </div>
-      <button class="hamburger" id="hamburger" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </nav>
+      <a class="btn nav-action" href="#contact">Scrivi alla label</a>
+    </nav>
 
-  <!-- Mobile Overlay Menu -->
-  <div class="mobile-overlay" id="mobileOverlay">
-    <div class="mobile-overlay-bg"></div>
-    <div class="mobile-overlay-content">
-      <div class="mobile-overlay-header">
-        <span class="mobile-overlay-label">Navigazione</span>
-      </div>
-      <nav class="mobile-nav">
-        <a href="#hero" class="mobile-nav-link" data-index="0"><span class="mobile-nav-num">01</span>Home</a>
-        <a href="#about" class="mobile-nav-link" data-index="1"><span class="mobile-nav-num">02</span>Label</a>
-        <a href="#artists" class="mobile-nav-link" data-index="2"><span class="mobile-nav-num">03</span>Artisti</a>
-        <a href="#releases" class="mobile-nav-link" data-index="3"><span class="mobile-nav-num">04</span>Release</a>
-        <a href="#services" class="mobile-nav-link" data-index="4"><span class="mobile-nav-num">05</span>Servizi</a>
-        <a href="#contact" class="mobile-nav-link mobile-nav-cta" data-index="5"><span class="mobile-nav-num">06</span>Contatti</a>
-      </nav>
-      <div class="mobile-overlay-footer">
-        <span class="mobile-overlay-slogan">Record Label — Martina Franca</span>
-        <div class="mobile-overlay-social">
-          <a href="https://www.instagram.com/it.sound_/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-          <a href="https://www.facebook.com/profile.php?id=61568625212052" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-        </div>
-      </div>
-    </div>
-  </div>
+    <h1 class="hero-title lines">
+      <span class="line"><span data-line style="--i:0">Suono</span></span>
+      <span class="line"><span data-line style="--i:1">trulli</span></span>
+    </h1>
 
-  <!-- HERO — Frame 21 design -->
-  <section class="hero" id="hero">
-    <div class="hero-bg" aria-hidden="true">
-      <img src="/hero-bg.webp" alt="" />
-      <div class="hero-bg-overlay"></div>
-      <div class="hero-grid" aria-hidden="true"></div>
+    <button class="hero-shot" id="nextRelease" type="button" aria-label="Prossima release">
+      <img
+        id="heroArt"
+        src="https://i.scdn.co/image/ab67616d00001e020116c2522f5339ba301bf813"
+        alt="Copertina di Titanium, Marco Carbotti"
+        width="800"
+        height="1067"
+      />
+    </button>
+
+    <div class="hero-foot">
+      <p class="hero-lead">Record label di Martina Franca, in Valle d'Itria. Clicca la copertina per la release dopo.</p>
+      <p class="hero-side">
+        <span id="heroFact">Titanium</span><br />
+        <a id="heroListen" href="https://open.spotify.com/album/2X6OOybcYBDlQBRiTkJLgc">Apri la copertina su Spotify quando vuoi sentirla</a>
+      </p>
     </div>
-    <div class="hero-inner">
-      <!-- Left column: text content (60%) -->
-      <div class="hero-text">
-        <div class="hero-badge">
-          <span class="pulse-dot pulse-dot--live"></span>
-          Since 2020 · Martina Franca
-        </div>
-        <h1 class="hero-title">
-          <span class="hero-line hero-line-1">
-            <img src="/logo-hero.png" alt="ITSound" class="hero-logo-img" />
-          </span>
-          <span class="hero-line hero-line-2">
-            <span class="word">
-              <span class="char">R</span><span class="char">e</span><span class="char">c</span><span class="char">o</span><span class="char">r</span><span class="char">d</span>
-            </span>
-            <span class="word">
-              <span class="char">L</span><span class="char">a</span><span class="char">b</span><span class="char">e</span><span class="char">l</span>
-            </span>
-          </span>
-        </h1>
-        <div class="hero-subtitle">
-          <span class="subtitle-line"><span class="subtitle-line-inner">Da Martina Franca al mondo. Collaboriamo con DJ, producer e artisti emergenti per trasformare la tua visione in musica.</span></span>
-        </div>
-        <div class="hero-actions">
-          <a href="#contact" class="btn btn-primary magnetic-btn">
-            <span class="btn-text">Invia il tuo Demo</span>
-            <i class="fas fa-arrow-right"></i>
-          </a>
-          <a href="#services" class="btn btn-outline magnetic-btn">
-            <i class="fas fa-headphones"></i>
-            <span class="btn-text">I Nostri Servizi</span>
-          </a>
-        </div>
-        <div class="hero-meta">
-          <span class="hero-meta-item"><span class="counter" data-target="15" data-suffix="+">0</span> Artisti</span>
-          <span class="hero-meta-dot" aria-hidden="true"></span>
-          <span class="hero-meta-item"><span class="counter" data-target="50" data-suffix="+">0</span> Release</span>
-          <span class="hero-meta-dot" aria-hidden="true"></span>
-          <span class="hero-meta-item">Distribuzione Globale</span>
-        </div>
-      </div>
-      <!-- Right column: player (40%) -->
-      <div class="hero-player-col">
-        <div class="its-player" id="itsoundPlayer"></div>
-      </div>
+  </header>
+
+  <section class="founders" id="about">
+    <div class="founders-sticky">
+      <h2 class="lines">
+        <span class="line"><span data-line style="--i:0">Due</span></span>
+        <span class="line"><span data-line style="--i:1">voci</span></span>
+      </h2>
     </div>
-    <!-- Floating Geometric Decorations (techno aesthetic) -->
-    <div class="hero-decor" aria-hidden="true">
-      <div class="decor-orbit-ring"></div>
-      <div class="decor-diamond"></div>
-      <div class="decor-sound-arc"></div>
-      <div class="decor-dot decor-dot--1"></div>
-      <div class="decor-dot decor-dot--2"></div>
-      <div class="decor-dot decor-dot--3"></div>
-    </div>
-    <!-- Ambient floating particles -->
-    <canvas id="heroParticles" class="hero-particles" aria-hidden="true"></canvas>
-    <!-- Enhanced EQ waveform animation -->
-    <canvas id="heroWaveform" class="hero-waveform" aria-hidden="true"></canvas>
-    
-    <div class="hero-corner-tl" aria-hidden="true"></div>
-    <div class="hero-corner-br" aria-hidden="true"></div>
-    <div class="hero-accent-line" aria-hidden="true"></div>
-    <div class="scroll-indicator">
-      <span class="scroll-label">Scorri</span>
-      <svg class="scroll-arrow" width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
-        <path d="M11 3v14M6 12l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+    <div>
+      <article class="portrait" data-reveal style="--d:0">
+        <img src="/artists/marco-carbotti.jpg" alt="Marco Carbotti" width="800" height="1000" />
+        <h3>Marco Carbotti</h3>
+        <p>Founder, producer e DJ. Techno e house, dalla produzione delle tracce alla label.</p>
+      </article>
+      <article class="portrait" data-reveal style="--d:1">
+        <img src="/artists/andrea-maggi.jpg" alt="Andrea Maggi" width="800" height="1000" />
+        <h3>Andrea Maggi</h3>
+        <p>Co-founder. Social, contenuti e strategia, l'altra metà di ITSound.</p>
+      </article>
     </div>
   </section>
 
-  <!-- Marquee Trust Bar -->
-  <div class="trust-bar">
-    <div class="trust-track">
-      <span>Mixing & Mastering</span>
-      <span class="dot">✦</span>
-      <span>Ghost Production</span>
-      <span class="dot">✦</span>  
-      <span>Track Placement</span>
-      <span class="dot">✦</span>
-      <span>Track Promotion</span>
-      <span class="dot">✦</span>
-      <span>Social Management</span>
-      <span class="dot">✦</span>
-      <span>Graphic Design</span>
-      <span class="dot">✦</span>
-      <span>Consulting</span>
-      <span class="dot">✦</span>
-      <!-- repeat once for seamless loop -->
-      <span>Mixing & Mastering</span>
-      <span class="dot">✦</span>
-      <span>Ghost Production</span>
-      <span class="dot">✦</span>
-      <span>Track Placement</span>
-      <span class="dot">✦</span>
-      <span>Track Promotion</span>
-      <span class="dot">✦</span>
-      <span>Social Management</span>
-      <span class="dot">✦</span>
-      <span>Graphic Design</span>
-      <span class="dot">✦</span>
-      <span>Consulting</span>
-      <span class="dot">✦</span>
-    </div>
-  </div>
+  <figure class="place">
+    <img src="/about-martina-franca.webp" alt="Martina Franca, in Valle d'Itria" width="1920" height="1080" data-reveal />
+    <figcaption>Martina Franca, Valle d'Itria. La label nasce qui nel 2022.</figcaption>
+  </figure>
 
-  <!-- ABOUT / LABEL -->
-  <section class="section about" id="about">
-    <canvas id="aboutWaves" aria-hidden="true"></canvas>
-    <div class="container">
-      <div class="about-grid">
-        <div class="about-visual parallax-wrap">
-          <div class="about-bg" style="background-image: url(/about-martina-franca.webp)"></div>
-          <div class="about-overlay"></div>
-          <div class="about-frame"></div>
-          <div class="about-badge">
-            <span class="badge-year">Dal 2022</span>
-            <span class="badge-place">Martina Franca — Puglia</span>
-          </div>
-        </div>
-        <div class="about-content">
-          <span class="section-label">/ La Label</span>
-          <h2 class="section-title">Una label che <span class="gradient-text">cresce con te</span></h2>
-          <p class="section-text">
-            <span class="about-line"><span class="about-line-inner">ITSound nasce a Martina Franca dalla passione di Marco e Andrea per la musica.</span></span>
-            <span class="about-line"><span class="about-line-inner">Siamo una record label che collabora con DJ, producer e artisti emergenti, offrendo servizi completi: dalla produzione alla promozione.</span></span>
-          </p>
-          <div class="stats-row" id="statsRow">
-            <div class="stat-card" data-expandable>
-              <div class="stat-card-header">
-                <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
-                <span class="stat-num counter" data-target="2022">0</span>
-                <div class="stat-bar"><span class="stat-bar-fill" style="width: 0%"></span></div>
-                <span class="stat-label">Fondazione</span>
-                <div class="stat-chevron"><i class="fas fa-chevron-down"></i></div>
-              </div>
-              <div class="stat-expand">
-                <div class="stat-expand-inner">
-                  <p>Marco Carbotti e Andrea fondano ITSound a Martina Franca con la missione di portare l'elettronica pugliese nel mondo.</p>
-                  <span class="stat-expand-tag">2022 · Martina Franca</span>
-                </div>
-              </div>
-            </div>
-            <div class="stat-card" data-expandable>
-              <div class="stat-card-header">
-                <div class="stat-icon"><i class="fas fa-music"></i></div>
-                <span class="stat-num counter" data-target="50" data-suffix="+">0</span>
-                <div class="stat-bar"><span class="stat-bar-fill" style="width: 0%"></span></div>
-                <span class="stat-label">Tracce Prodotte</span>
-                <div class="stat-chevron"><i class="fas fa-chevron-down"></i></div>
-              </div>
-              <div class="stat-expand">
-                <div class="stat-expand-inner">
-                  <p>Da "Titanium" a "Make You Mine", ogni traccia è prodotta con cura tra remix, originali e ghost production per artisti emergenti.</p>
-                  <span class="stat-expand-tag">Album · Singoli · Remix</span>
-                </div>
-              </div>
-            </div>
-            <div class="stat-card" data-expandable>
-              <div class="stat-card-header">
-                <div class="stat-icon"><i class="fas fa-microphone-alt"></i></div>
-                <span class="stat-num counter" data-target="15" data-suffix="+">0</span>
-                <div class="stat-bar"><span class="stat-bar-fill" style="width: 0%"></span></div>
-                <span class="stat-label">Artisti</span>
-                <div class="stat-chevron"><i class="fas fa-chevron-down"></i></div>
-              </div>
-              <div class="stat-expand">
-                <div class="stat-expand-inner">
-                  <p>Collaboriamo con DJ, producer e cantanti emergenti dalla Puglia e da tutta Italia, offrendo produzione, mixing e promozione.</p>
-                  <span class="stat-expand-tag">DJ · Producer · Cantanti</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <section class="services" id="services" aria-label="Servizi">
+    <div class="svc-row" data-reveal style="--d:0">
+      <h2 class="svc-name soft">Cosa facciamo</h2>
+    </div>
+    <div class="svc-row" data-reveal style="--d:1">
+      <h3 class="svc-name">Mixing</h3>
+      <p class="svc-copy">Mixing e mastering per portare il tuo suono al livello successivo.</p>
+    </div>
+    <div class="svc-row" data-reveal style="--d:2">
+      <h3 class="svc-name">Ghost</h3>
+      <p class="svc-copy">Beat e produzioni per DJ e artisti, scritte sul tuo sound.</p>
+    </div>
+    <div class="svc-row" data-reveal style="--d:3">
+      <h3 class="svc-name">Playlist</h3>
+      <p class="svc-copy">La tua musica sulle playlist giuste, con una strategia di posizionamento.</p>
+    </div>
+    <div class="svc-row" data-reveal style="--d:4">
+      <h3 class="svc-name">Promo</h3>
+      <p class="svc-copy">Promozione su social, playlist, blog e radio.</p>
+    </div>
+    <div class="svc-row" data-reveal style="--d:5">
+      <h3 class="svc-name">Social</h3>
+      <p class="svc-copy">Contenuti, strategia e presenza sui canali della label e degli artisti.</p>
+    </div>
+    <div class="svc-row" data-reveal style="--d:6">
+      <h3 class="svc-name">Grafica</h3>
+      <p class="svc-copy">Copertine, visual e identità. L'immagine della traccia, al primo sguardo.</p>
     </div>
   </section>
 
-  <!-- ARTISTS -->
-  <section class="section artists" id="artists">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-label">/ Artisti</span>
-        <h2 class="section-title">I nostri <span class="gradient-text">talenti</span></h2>
-        <p class="section-text">Conosci gli artisti che collaborano con ITSound.</p>
+  <section class="work" id="releases">
+    <h2 data-reveal>Tre release</h2>
+    <article class="folder folder-dark" style="--i:0">
+      <div class="folder-strip">
+        <span class="tab">Titanium</span>
+        <span class="folder-cat">Techno</span>
       </div>
-      <div class="artists-grid">
-        <article class="artist-card" data-artist="marco-carbotti">
-          <div class="artist-avatar">
-            <img src="artists/marco-carbotti.jpg" alt="Marco Carbotti" class="artist-avatar-img" />
-          </div>
-          <h3 class="artist-name">Marco Carbotti</h3>
-          <span class="artist-role">Founder · Producer · DJ</span>
-          <span class="artist-genre">Techno / House</span>
-          <div class="artist-social">
-            <a href="https://open.spotify.com/intl-it/artist/5v5uG6oqevacHrakv2TBfa" target="_blank" aria-label="Spotify"><i class="fab fa-spotify"></i></a>
-            <a href="https://soundcloud.com/marco-carbotti-dj" target="_blank" aria-label="SoundCloud"><i class="fab fa-soundcloud"></i></a>
-            <a href="https://www.instagram.com/marco_carbotti/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-          </div>
-        </article>
-        <article class="artist-card" data-artist="andrea-maggi">
-          <div class="artist-avatar">
-            <img src="artists/andrea-maggi.jpg" alt="Andrea Maggi" class="artist-avatar-img" />
-          </div>
-          <h3 class="artist-name">Andrea Maggi</h3>
-          <span class="artist-role">Co-Founder · Social Media</span>
-          <span class="artist-genre">Content · Strategy</span>
-          <div class="artist-social">
-            <a href="https://www.instagram.com/andreamaggi27/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-          </div>
-        </article>
+      <div class="folder-body">
+        <img src="https://i.scdn.co/image/ab67616d00001e020116c2522f5339ba301bf813" alt="Copertina di Titanium" width="1200" height="750" />
+        <div>
+          <p>Titanium è una traccia techno di Marco Carbotti. È nel catalogo ITSound insieme alle produzioni originali e ai remix nati a Martina Franca.</p>
+          <a href="https://open.spotify.com/album/2X6OOybcYBDlQBRiTkJLgc">Ascolta su Spotify</a>
+        </div>
       </div>
+    </article>
+    <article class="folder folder-paper" style="--i:1">
+      <div class="folder-strip">
+        <span class="tab">Make You Mine</span>
+        <span class="folder-cat">Techno</span>
+      </div>
+      <div class="folder-body">
+        <img src="https://i.scdn.co/image/ab67616d00001e0225387676ce323c13639b3adf" alt="Copertina di Make You Mine" width="1200" height="750" loading="lazy" />
+        <div>
+          <p>Make You Mine è una produzione originale di Marco Carbotti. Sta nel catalogo della label con le altre tracce firmate ITSound.</p>
+          <a href="https://open.spotify.com/album/0JHyIPjFlEHyZqHQx2rETI">Ascolta su Spotify</a>
+        </div>
+      </div>
+    </article>
+    <article class="folder folder-accent" style="--i:2">
+      <div class="folder-strip">
+        <span class="tab">Mr. Saxobeat</span>
+        <span class="folder-cat">Techno mix</span>
+      </div>
+      <div class="folder-body">
+        <img src="https://i.scdn.co/image/ab67616d00001e021e17b9f6bba6541ebe714d4b" alt="Copertina di Mr. Saxobeat, techno mix" width="1200" height="750" loading="lazy" />
+        <div>
+          <p>Mr. Saxobeat è il techno mix di Marco Carbotti. Una rilettura del brano, pubblicata nel catalogo ITSound.</p>
+          <a href="https://open.spotify.com/album/6RrvxRxldzSc0rlIoGVRU5">Ascolta su Spotify</a>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="contact" id="contact">
+    <p class="contact-lead" data-reveal>Manda una demo o racconta il progetto.</p>
+    <a class="contact-email" data-reveal style="--d:1" href="mailto:labelsubmission@itsound.it?subject=Demo%20per%20ITSound&body=Ciao%20ITSound%2C%0A%0A">
+      labelsubmission<br />@itsound.it
+    </a>
+    <div class="contact-meta">
+      <p>Scrivi anche su <a href="https://wa.me/393317834748?text=Ciao%20ITSound%21%20Ho%20una%20domanda%20sui%20vostri%20servizi.">WhatsApp</a>. La label sta a Martina Franca, in provincia di Taranto.</p>
+      <p>
+        <a href="https://www.instagram.com/it.sound_/">Instagram</a><br />
+        <a href="https://www.facebook.com/profile.php?id=61568625212052">Facebook</a><br />
+        <a href="mailto:m.carbotti@itsound.it">m.carbotti@itsound.it</a>
+      </p>
     </div>
   </section>
 
-  <!-- RELEASES -->
-  <section class="section releases" id="releases">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-label">/ Release</span>
-        <h2 class="section-title">Ascolta <span class="gradient-text">le nostre tracce</span></h2>
-        <p class="section-text">Le produzioni firmate ITSound e dai nostri artisti.</p>
-      </div>
-      <div class="releases-grid">
-        <div class="release-card" data-delay="0">
-          <div class="release-cover" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED);">
-            <i class="fas fa-music"></i>
-          </div>
-          <div class="release-info">
-            <span class="release-genre">Techno</span>
-            <h3 class="release-title">Make You Mine</h3>
-            <span class="release-artist">Marco Carbotti</span>
-            <div class="release-links">
-              <a href="https://open.spotify.com/intl-it/artist/5v5uG6oqevacHrakv2TBfa" target="_blank" title="Spotify"><i class="fab fa-spotify"></i></a>
-              <a href="https://soundcloud.com/marco-carbotti-dj" target="_blank" title="SoundCloud"><i class="fab fa-soundcloud"></i></a>
-              <a href="https://www.youtube.com/@Marco_Carbotti" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
-            </div>
-          </div>
-        </div>
-        <div class="release-card" data-delay="1">
-          <div class="release-cover" style="background: linear-gradient(135deg, #06D6A0, #8B5CF6);">
-            <i class="fas fa-music"></i>
-          </div>
-          <div class="release-info">
-            <span class="release-genre">Techno</span>
-            <h3 class="release-title">Mr. Saxobeat — Techno Mix</h3>
-            <span class="release-artist">Marco Carbotti</span>
-            <div class="release-links">
-              <a href="https://open.spotify.com/intl-it/artist/5v5uG6oqevacHrakv2TBfa" target="_blank" title="Spotify"><i class="fab fa-spotify"></i></a>
-              <a href="https://soundcloud.com/marco-carbotti-dj" target="_blank" title="SoundCloud"><i class="fab fa-soundcloud"></i></a>
-              <a href="https://www.youtube.com/@Marco_Carbotti" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SERVICES -->
-  <section class="section services" id="services">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-label">/ Servizi</span>
-        <h2 class="section-title">Cosa <span class="gradient-text">offriamo</span></h2>
-        <p class="section-text">Dalla produzione alla promozione, tutto per la tua musica.</p>
-      </div>
-      <div class="services-grid">
-        <div class="service-card" data-delay="0">
-          <div class="service-num">01</div>
-          <div class="service-icon"><i class="fas fa-sliders-h"></i></div>
-          <h3>Mixing & Mastering</h3>
-          <p>Portiamo il tuo suono al livello successivo. Mixing professionale e mastering per ogni genere.</p>
-          <a href="#contact" class="service-link">Scopri →</a>
-        </div>
-        <div class="service-card" data-delay="1">
-          <div class="service-num">02</div>
-          <div class="service-icon"><i class="fas fa-ghost"></i></div>
-          <h3>Ghost Production</h3>
-          <p>Beat e produzioni professionali per DJ e artisti. Tracce personalizzate per il tuo sound.</p>
-          <a href="#contact" class="service-link">Scopri →</a>
-        </div>
-        <div class="service-card" data-delay="2">
-          <div class="service-num">03</div>
-          <div class="service-icon"><i class="fas fa-chart-line"></i></div>
-          <h3>Track Placement</h3>
-          <p>La tua musica sulle playlist giuste. Strategia di posizionamento per massima visibilità.</p>
-          <a href="#contact" class="service-link">Scopri →</a>
-        </div>
-        <div class="service-card" data-delay="0">
-          <div class="service-num">04</div>
-          <div class="service-icon"><i class="fas fa-bullhorn"></i></div>
-          <h3>Track Promotion</h3>
-          <p>Promuoviamo la tua musica su tutti i canali: social, playlist, blog e radio.</p>
-          <a href="#contact" class="service-link">Scopri →</a>
-        </div>
-        <div class="service-card" data-delay="1">
-          <div class="service-num">05</div>
-          <div class="service-icon"><i class="fas fa-hashtag"></i></div>
-          <h3>Social Management</h3>
-          <p>Gestiamo la tua presenza social: contenuti, strategia, crescita organica e adv.</p>
-          <a href="#contact" class="service-link">Scopri →</a>
-        </div>
-        <div class="service-card" data-delay="2">
-          <div class="service-num">06</div>
-          <div class="service-icon"><i class="fas fa-paint-brush"></i></div>
-          <h3>Graphic Design</h3>
-          <p>Copertine, visual, logo, brand identity. La tua immagine al primo sguardo.</p>
-          <a href="#contact" class="service-link">Scopri →</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TEAM / TERRITORY -->
-  <section class="section territory" id="territory">
-    <div class="container">
-      <div class="territory-grid">
-        <div class="territory-content">
-          <span class="section-label">/ Territorio</span>
-          <h2 class="section-title">Dalla <span class="gradient-text">Puglia</span> al mondo</h2>
-          <p class="section-text">Siamo orgogliosi di essere una label nata a Martina Franca, in Valle d'Itria. Il nostro cuore batte qui, tra i trulli e la musica.</p>
-          <a href="#contact" class="btn btn-primary magnetic-btn">
-            <span class="btn-text">Collabora con noi</span>
-            <i class="fas fa-arrow-right"></i>
-          </a>
-        </div>
-        <div class="territory-cards">
-          <div class="t-card"><span class="t-icon">📍</span><h4>Martina Franca</h4><p>Heart of Valle d'Itria</p></div>
-          <div class="t-card"><span class="t-icon">🎵</span><h4>Scouting Locale</h4><p>Talenti pugliesi</p></div>
-          <div class="t-card"><span class="t-icon">🌍</span><h4>Visione Globale</h4><p>Collaborazioni worldwide</p></div>
-          <div class="t-card"><span class="t-icon">🤝</span><h4>Rete</h4><p>Eventi e scuole</p></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="section cta" id="contact">
-    <div class="container">
-      <h2 class="cta-title">Hai un progetto musicale?</h2>
-      <p class="cta-text">Raccontaci la tua idea. Ti rispondiamo in 24 ore.</p>
-      <a href="mailto:m.carbotti@itsound.it" class="btn btn-primary btn-large magnetic-btn">
-        <span class="btn-text">Contattaci ora</span>
-        <i class="fas fa-arrow-right"></i>
-      </a>
-      <div class="cta-whatsapp">
-        <a href="https://wa.me/393317834748?text=Ciao%20ITSound%21%20Ho%20una%20domanda%20sui%20vostri%20servizi." target="_blank" class="btn btn-outline magnetic-btn">
-          <i class="fab fa-whatsapp"></i>
-          <span class="btn-text">WhatsApp</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
   <footer class="footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <span class="logo-text">i<span class="text-accent">T</span>Sound</span>
-          <p>Record label di Martina Franca. Collaboriamo con DJ, producer e artisti emergenti.</p>
-          <div class="footer-social">
-            <a href="https://www.instagram.com/it.sound_/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="https://www.facebook.com/profile.php?id=61568625212052" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-          </div>
-        </div>
-        <div class="footer-links">
-          <h5>Pagine</h5>
-          <a href="#about">Label</a>
-          <a href="#artists">Artisti</a>
-          <a href="#releases">Release</a>
-          <a href="#services">Servizi</a>
-          <a href="#contact">Contatti</a>
-        </div>
-        <div class="footer-links">
-          <h5>Servizi</h5>
-          <a href="#services">Mixing & Mastering</a>
-          <a href="#services">Ghost Production</a>
-          <a href="#services">Track Placement</a>
-          <a href="#services">Social Management</a>
-          <a href="#services">Graphic Design</a>
-        </div>
-        <div class="footer-links">
-          <h5>Contatti</h5>
-          <a href="mailto:m.carbotti@itsound.it">m.carbotti@itsound.it</a>
-          <a href="mailto:labelsubmission@itsound.it">labelsubmission@itsound.it</a>
-          <a href="https://www.instagram.com/it.sound_/" target="_blank">@it.sound_</a>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <span>&copy; 2026 ITSound — Martina Franca (TA)</span>
-        <span>Webmaster: <a href="https://www.instagram.com/andreamaggi27/">Andrea Maggi</a></span>
-      </div>
+    <p class="mark">ITSOUND</p>
+    <div class="footer-grid">
+      <nav class="footer-links" aria-label="Nel sito">
+        <a href="#about">Label</a>
+        <a href="#releases">Release</a>
+        <a href="#services">Servizi</a>
+        <a href="#contact">Contatti</a>
+        <a href="https://www.instagram.com/it.sound_/">Instagram</a>
+        <a href="https://www.facebook.com/profile.php?id=61568625212052">Facebook</a>
+      </nav>
+      <p>
+        Martina Franca (TA)<br />
+        <a href="mailto:labelsubmission@itsound.it">labelsubmission@itsound.it</a>
+      </p>
+    </div>
+    <div class="footer-end">
+      <span>2026 ITSound. Webmaster: <a href="https://www.instagram.com/andreamaggi27/">Andrea Maggi</a></span>
+      <a class="btn" href="mailto:labelsubmission@itsound.it?subject=Demo%20per%20ITSound">Scrivi</a>
     </div>
   </footer>
 
-  <!-- Floating Mini Player (appare quando si scrolla oltre la hero) -->
-  <div class="floating-player" id="floatingPlayer">
-    <div class="floating-player-inner">
-      <div class="floating-player-art">
-        <img src="" alt="" class="floating-player-img" id="floatingArt" />
-      </div>
-      <div class="floating-player-info">
-        <span class="floating-player-title" id="floatingTitle">Titanium</span>
-        <span class="floating-player-artist" id="floatingArtist">Marco Carbotti</span>
-      </div>
-      <button class="floating-player-btn" id="floatingPlayBtn" aria-label="Play on Spotify">
-        <i class="fas fa-play"></i>
-      </button>
-    </div>
-  </div>
-
-  <!-- WhatsApp Float -->
-  <a href="https://wa.me/393317834748?text=Ciao%20ITSound%21%20Ho%20una%20domanda%20sui%20vostri%20servizi." class="whatsapp-float" target="_blank" aria-label="WhatsApp">
-    <i class="fab fa-whatsapp"></i>
-  </a>
+  <script type="module" src="/src/js/poster.js"></script>
 </body>
 </html>
